@@ -98,16 +98,6 @@ DELETE FROM costumepart
 REPLACE INTO costumepart (geom, tex1, tex2, fx, character, costume, part)
     VALUES ('{geom}', '{tex1}', '{tex2}', '{fx}', '{character_id}', '{costume_id}', '{part}');
 """
-# """\
-# UPDATE costumepart
-#     SET geom='{geom}',
-#         text1='{tex1}',
-#         text2='{tex2}',
-#         fx='{fx}'
-#     WHERE character='{character_id}'
-#         AND costume='{costume_id}'
-#         AND part='{part}'
-# """
             sql = sql.format(
                 character_id=character_id,
                 costume_id=costume_id,
