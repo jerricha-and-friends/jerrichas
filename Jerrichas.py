@@ -19,8 +19,8 @@ VERSION = "0.1.0"
 ### Aug-02-2015
 # * Wrote all the things and published
 import os
-# PARAGON_CHAT_DB = os.getenv('appdata') + """\Paragon Chat\Database\ParagonChat.db"""
-PARAGON_CHAT_DB = """tests\ParagonChat2.db"""
+PARAGON_CHAT_DB = os.getenv('appdata') + """\Paragon Chat\Database\ParagonChat.db"""
+# PARAGON_CHAT_DB = """tests\ParagonChat2.db"""
 COSTUME_FILE = """tests\cooltrench_w_boots"""
 ###########################
 ### PROGRAM BEINGS HERE ###
@@ -42,6 +42,8 @@ def test_paths():
     except Exception:
         sys.exit("ERROR: COSTUME_FILE path is invalid.\nYou provided:\n\t{}"
             .format(COSTUME_FILE.replace('/', os.path.sep)))
+
+    return True
 
 
 def read_costumepart(costume_file=COSTUME_FILE):
@@ -81,30 +83,44 @@ class Database(object):
         return characters.fetchall()
 
     def replace_costume(self, character_id, costume_id, costume_file=COSTUME_FILE):
+        from io import StringIO
         costumeparts = read_costumepart(costume_file)
-        try:
-            db.session.execute("BEGIN TRANSACTION")
-            for i in costumeparts:
-                sql =\
+        sql_script = StringIO()
+        # try:
+        #     db.session.execute("BEGIN TRANSACTION")
+        for i in costumeparts:
+            sql =\
 """\
-REPLACE INTO costumepart
-    SET geom='{geom}',
-        text1='{tex1}',
-        text2='{tex2}',
-        fx='{fx}',
+DELETE FROM costumepart
     WHERE character='{character_id}'
         AND costume='{costume_id}'
-        AND part='{part}'
+        AND part='{part}' ;
+REPLACE INTO costumepart (geom, tex1, tex2, fx, character, costume, part)
+    VALUES ('{geom}', '{tex1}', '{tex2}', '{fx}', '{character_id}', '{costume_id}', '{part}');
 """
-                sql = sql.format(
-                    character_id=character_id,
-                    costume_id=costume_id,
-                    **i
-                )
-                db.session.execute(sql)
-            db.session.execute("COMMIT TRANSACTION")
-        except Exception, e:
-            raise e
+# """\
+# UPDATE costumepart
+#     SET geom='{geom}',
+#         text1='{tex1}',
+#         text2='{tex2}',
+#         fx='{fx}'
+#     WHERE character='{character_id}'
+#         AND costume='{costume_id}'
+#         AND part='{part}'
+# """
+            sql = sql.format(
+                character_id=character_id,
+                costume_id=costume_id,
+                **i
+            )
+            sql_script.write(sql)
+        print(sql_script.getvalue())
+                # print(sql)
+        #         db.session.executescript(sql)
+        #     db.session.execute("COMMIT TRANSACTION")
+        # except Exception as e:
+        #     print(e)
+        #     db.session.execute("ROLLBACK")
 
 def event_loop():
     input()
