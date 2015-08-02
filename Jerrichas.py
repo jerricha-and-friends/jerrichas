@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# Requires Python 3
 VERSION = "0.1.0"
 ##### Jerricha's ParagonChat Costume Utility ######
 # Jerrichas.py will automatically replace a costume in your DB with a "costumesave" save.
@@ -20,7 +21,7 @@ VERSION = "0.1.0"
 import os
 # PARAGON_CHAT_DB = os.getenv('appdata') + """\Paragon Chat\Database\ParagonChat.db"""
 PARAGON_CHAT_DB = """tests\ParagonChat2.db"""
-COSTUME_FILE = """tests\dummy"""
+COSTUME_FILE = """tests\cooltrench_w_boots"""
 ###########################
 ### PROGRAM BEINGS HERE ###
 ###########################
@@ -43,10 +44,24 @@ def test_paths():
             .format(COSTUME_FILE.replace('/', os.path.sep)))
 
 
+def read_costumepart(costume_file=COSTUME_FILE):
+    import csv
+    costume_csv = csv.reader(open(costume_file, 'r'))
+    costume = map(
+        lambda row: dict(
+            part=row[0],
+            geom=row[1],
+            tex1=row[2],
+            tex2=row[3],
+            fx=row[39],
+        ),
+        costume_csv
+    )
+    return list(costume)
+
 class Database(object):
     def __init__(self):
         import sqlite3
-        self.costume = COSTUME_FILE
         self.conn = sqlite3.connect(PARAGON_CHAT_DB)
         self.conn.row_factory = self._dict_factory
         self.session = self.conn.cursor()
@@ -62,14 +77,34 @@ class Database(object):
         return accounts.fetchall()
 
     def get_characters(self, account):
-        characters = self.session.execute("SELECT id, name, class, curcostume FROM character WHERE account={}".format(account))
+        characters = self.session.execute("SELECT id, name, class, curcostume FROM character WHERE account='{}'".format(account))
         return characters.fetchall()
 
-    # def replace_costume(self, character, costume):
-    #     import csv
-    #     sql = "REPLACE INTO "
-    #     characters = self.session.execute("SELECT * FROM character WHERE account={}".format(account))
-    #     return characters
+    def replace_costume(self, character_id, costume_id, costume_file=COSTUME_FILE):
+        costumeparts = read_costumepart(costume_file)
+        try:
+            db.session.execute("BEGIN TRANSACTION")
+            for i in costumeparts:
+                sql =\
+"""\
+REPLACE INTO costumepart
+    SET geom='{geom}',
+        text1='{tex1}',
+        text2='{tex2}',
+        fx='{fx}',
+    WHERE character='{character_id}'
+        AND costume='{costume_id}'
+        AND part='{part}'
+"""
+                sql = sql.format(
+                    character_id=character_id,
+                    costume_id=costume_id,
+                    **i
+                )
+                db.session.execute(sql)
+            db.session.execute("COMMIT TRANSACTION")
+        except Exception, e:
+            raise e
 
 def event_loop():
     input()
