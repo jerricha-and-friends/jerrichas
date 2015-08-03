@@ -21,8 +21,9 @@ Instructions:
    of the DB, but you never know what happens!
 5. Open up a shell prompt, and run me with 'python Jerrichas.py' or
    'c:\Python34\python.exe Jerrichas.py', and follow the on-screen wizard.
-6. Please report your errors to me on the forums! This program has really
-   shakey error handling currently!
+6. Please report your errors to me on the forums
+   ( http://www.cohtitan.com/forum/index.php?topic=11197.msg189486 )! This
+   program has really shakey error handling currently!
 
 LEGAL: GPLv3. No warrenties. Use it, share it, hack it, but DO NOT sell it!
 Love <3 Jerricha, Summer of 2015\
