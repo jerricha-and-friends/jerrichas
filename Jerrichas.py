@@ -3,18 +3,29 @@ import os, sys
 VERSION = "0.1.0"
 __doc__ = """\
 ##### Jerricha's ParagonChat Costume Utility v.{} Info ######
-Jerrichas.py will automatically replace a costume in your DB with a "costumesave" save.
+Jerrichas.py will automatically replace a costume in your DB with a
+"costumesave" save.
 
 Instructions:
 1. Install latest Python 3 from https://www.python.org/downloads/
 2. Set two global variables in this file.
-    a. Set PARAGON_CHAT_DB to your ParagonChat.db location. (usually that's "%APPDATA%\Paragon Chat\Database\ParagonChat.db") (I've already set it there, so you usually don't have to change it.)
-    b. Set COSTUME_FILE to your file that you created with "/costumesave myfile" in Icon.exe. Usually stored in "City of Heroes\Data"
-        *NOTE*: Your costume file is NOT the same as the .costume files that are saved from the Character Creator in Icon.exe. See http://www.cohtitan.com/forum/index.php?topic=11076.0 for more info.
-4. Run me with 'python Jerrichas.py' or 'c:\Python34/python.exe Jerrichas.py'
-5. Please report your errors to me on the forums! This program has really shakey error handling currently!
+    a. Set PARAGON_CHAT_DB to your ParagonChat.db location. (usually that's
+       "%APPDATA%\Paragon Chat\Database\ParagonChat.db") (I've already set it
+       there, so you usually don't have to change it.)
+    b. Set COSTUME_FILE to your file that you created with "/costumesave
+       myfile" in Icon.exe. Usually stored in "City of Heroes\Data" *NOTE*:
+       Your costume file is NOT the same as the .costume files that are saved
+       from the Character Creator in Icon.exe. See
+       http://www.cohtitan.com/forum/index.php?topic=11076.0 for more info.
+4. BACKUP your ParagonChat.db file! Jerrichas will also *try* to make a backup
+   of the DB, but you never know what happens!
+5. Open up a shell prompt, and run me with 'python Jerrichas.py' or
+   'c:\Python34\python.exe Jerrichas.py', and follow the on-screen wizard.
+6. Please report your errors to me on the forums! This program has really
+   shakey error handling currently!
 
-LEGAL: GPLv3. No warrenties. Use it, share it, hack it, but don't sell it!\
+LEGAL: GPLv3. No warrenties. Use it, share it, hack it, but DO NOT sell it!
+Love <3 Jerricha, Summer of 2015\
 """.format(VERSION)
 PARAGON_CHAT_DB = os.getenv('appdata') + """\Paragon Chat\Database\ParagonChat.db"""
 COSTUME_FILE = """Replace_Me"""
