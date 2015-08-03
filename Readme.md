@@ -16,7 +16,8 @@ Jerrichas works at the batch level. If you're just interested in cherry-picking 
 3. Run Jerrichas at the commandline with
 ```
 python Jerrichas.py
-``` or
+```
+or
 ```
 c:\Python34\python.exe Jerrichas.py
 ```
