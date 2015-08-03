@@ -11,19 +11,19 @@ Jerrichas works at the batch level. If you're just interested in cherry-picking 
 
 
 **How do I get it running?**
-#. Download Jerrichas.py
-#. Install Python 3 from https://www.python.org/downloads/
-#. Run Jerrichas at the commandline with
+1. Download Jerrichas.py
+2. Install Python 3 from https://www.python.org/downloads/
+3. Run Jerrichas at the commandline with
 ```
 python Jerrichas.py
 ``` or
 ```
 c:\Python34\python.exe Jerrichas.py
 ```
-#. When you run the program out of the box, you'll get an instructions screen. You need to set two global variables, PARAGON_CHAT_DB and COSTUME_FILE, and you're ready to go.
+4. When you run the program out of the box, you'll get an instructions screen. You need to set two global variables, PARAGON_CHAT_DB and COSTUME_FILE, and you're ready to go.
 
 
-**I'm a hacker / programmer / techie / SQL guru/ curious, why are there so many LoCs? Do I really need this whole program?**
+I'm a hacker / programmer / techie / SQL guru/ curious, why are there so many LoCs? Do I really need this whole program?**
 No. You are likely only going to be interested in the **Database** class, and the **read_costumepart** function. These do the heavy lifting and expose an API both to the database and /costumesve file. The rest of the program handles validation, tests, and user event threading. >80% of this program is for user interaction.
 
 
