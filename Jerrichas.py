@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# Requires Python 3
 import os, sys
 VERSION = "0.1.0"
 __doc__ = """\
@@ -19,14 +17,14 @@ Instructions:
 LEGAL: GPLv3. No warrenties. Use it, share it, hack it, but don't sell it!\
 """.format(VERSION)
 PARAGON_CHAT_DB = os.getenv('appdata') + """\Paragon Chat\Database\ParagonChat.db"""
-COSTUME_FILE = """tests/cooltrench_w_boots"""
-# COSTUME_FILE = """Replace_Me"""
-####################################################
+COSTUME_FILE = """Replace_Me"""
 ###########################
 ### PROGRAM BEINGS HERE ###
 ###########################
 PARAGON_CHAT_DB = PARAGON_CHAT_DB.replace(os.path.sep, '/')
 COSTUME_FILE = COSTUME_FILE.replace(os.path.sep, '/')
+
+from io import StringIO
 
 
 def test_paths():
@@ -75,9 +73,13 @@ def read_costumepart(costume_file=COSTUME_FILE):
 class Database(object):
     def __init__(self, db_fp=PARAGON_CHAT_DB):
         import sqlite3
-        self.conn = sqlite3.connect(db_fp)
-        self.conn.row_factory = self._dict_factory
-        self.session = self.conn.cursor()
+        try:
+            self.db_fp = db_fp
+            self.conn = sqlite3.connect(self.db_fp)
+            self.conn.row_factory = self._dict_factory
+            self.session = self.conn.cursor()
+        except:
+            sys.exit("ERROR: Jerrichas terminating\nSomething went wrong with the DB.")
 
     def _dict_factory(self, cursor, row):
         d = {}
@@ -85,16 +87,25 @@ class Database(object):
             d[col[0]] = row[idx]
         return d
 
+    def make_backup(self):
+        "Backs-up yo shit."
+        from shutil import copy
+        backup_fp = os.path.join(os.path.split(PARAGON_CHAT_DB)[0], "ParagonChat.db.jerrichas")
+        try:
+            copy(PARAGON_CHAT_DB, backup_fp)
+        except IOError:
+            sys.exit("ERROR: Jerrichas terminating\nUnable to make a backup of your DB.")
+        return True
+
     def get_accounts(self):
         accounts = self.session.execute("SELECT id, name FROM account")
         return accounts.fetchall()
 
     def get_characters(self, account):
-        characters = self.session.execute("SELECT id, name, class, curcostume FROM character WHERE account='{}'".format(account))
+        characters = self.session.execute("SELECT id, name FROM character WHERE account='{}'".format(account))
         return characters.fetchall()
 
     def replace_costume(self, character_id, costume_id, costume_file=COSTUME_FILE):
-        from io import StringIO
         costumeparts = read_costumepart(costume_file)
         sql_script = StringIO("BEGIN;")
         for i in costumeparts:
@@ -121,11 +132,67 @@ REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, co
             self.session.execute("ROLLBACK;")
 
 
+def _validate_choice(choice, lst):
+    return True if len(list(filter(lambda row: choice == str(row['id']), lst))) == 1 else False
+
+
+def _display_choice(table, title):
+    display = StringIO("")
+    display.write("====={title}=====\n".format(title=title.capitalize()))
+    for row in table:
+        display.write("{id}: {name}\n".format(**row))
+    display.write("\n")
+    return display.getvalue()
+
+
 def event_loop(db):
+    #To be refactored
+    accounts = db.get_accounts()
+    if len(accounts) == 1:
+        account_id = 1
+    else:
+        # Choose Account sub-loop
+        while True:
+            print(_display_choice(accounts, "accounts"))
+            try:
+                account_id = str(input("Select your account ID [1-{}]: ".format(len(accounts))))
+                assert _validate_choice(account_id, accounts) is True
+                break
+            except:
+                print("Invalid input.")
+
+    # Choose Character sub-loop
+    characters = db.get_characters(account_id)
     while True:
-        account_id = input("\n\nSelect your account id: ")
-        # character_id = input("")
-        # costume_id =
+        print(_display_choice(characters, "characters"))
+        try:
+            character_id = str(input("Select your character ID [1-{}]: ".format(len(characters))))
+            assert _validate_choice(character_id, characters) is True
+            break
+        except:
+            print("Invalid input.")
+
+    # Choose Costume sub-loop
+    character = db.session.execute("SELECT name, class, curcostume FROM character WHERE id='{}'".format(character_id)).fetchone()
+    while True:
+        try:
+            costume_id = str(input("\nYou have selected: {name} ({class})\nSelect costume ID to replace [0-9, current: {curcostume}]: ".format(**character)))
+            assert costume_id in [str(i) for i in range(10)]
+            break
+        except:
+            print("Invalid input.")
+
+    # Confirm Selection
+    confirm = str(input("\nWe're about to replace {name}'s costume #{costume_id} with the /costumesave file '{COSTUME_FILE}'\nThis change is permanent, and may result in a corrupt DB file -- please make sure to backup your DB!\n(Jerricha's will also backup your DB in _backup\ParagonChat.db) \nDo you wish to proceed? (you must type exactly 'y' or 'yes') [ Yes / No ]: "
+        .format(COSTUME_FILE=COSTUME_FILE, costume_id=costume_id, name=character['name']))).lower()
+    if confirm == 'y' or confirm == 'yes':
+        print("Backing up your DB to 'ParagonChat.db.jerrichas'...")
+        db.make_backup()
+        print("Performing costume replace on 'ParagonChat.db'...")
+        db.replace_costume(character_id=character_id, costume_id=character_id)
+        print("DONE! Thanks for using Jerricha's!")
+    else:
+        print("\n\nNothing was modified in your DB. Thanks for using Jerricha's!")
 
 
 def main():
