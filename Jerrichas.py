@@ -251,6 +251,24 @@ def _display_choice(table, title):
 
 
 def event_loop(db, costumesave):
+    # Choose Mode event-loop
+    while True:
+        print("""\
+=======**Mode Selection**=======
+1: Batch Mode
+    Jerricha's will replace an entire costume with the costumesave file.
+
+2: Cherry-Pick Mode
+    You curated your costumesave file to ONLY include the part(s) you want.
+    Each part is put on its own line. Jerricha's will intelligently replace
+    only those parts that need replacing for the costume of your choosing.
+""")
+        try:
+            mode = input("Select mode [1-2]: ")
+            assert mode in range(1, 2)
+        except:
+                print("Invalid input.")
+
     accounts = db.get_accounts()
     if len(accounts) == 1:
         account_id = 1
