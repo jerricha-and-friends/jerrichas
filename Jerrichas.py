@@ -1,29 +1,26 @@
 #!/usr/bin/env python
-import os, sys
 VERSION = "0.2.0"
 __doc__ = """\
-##### Jerricha's ParagonChat Costume Utility v.{} Info ######
+##### Jerricha's ParagonChat Costume App v.{} ######
 Jerrichas.py will automatically replace a costume in your DB with a
 "costumesave" save.
 
 Instructions:
-1. Install latest Python 3 from https://www.python.org/downloads/
-2. Set two global variables in this file.
-    a. Set PARAGON_CHAT_DB to your ParagonChat.db location. (usually that's
-       "%APPDATA%\Paragon Chat\Database\ParagonChat.db") (I've already set it
-       there, so you usually don't have to change it.)
-    b. Set COSTUME_FILE to your file that you created with "/costumesave
+1. Open up jerrichas.config (I've JUST created it in this folder).
+    a. Set COSTUME_FILE to your file that you created with "/costumesave
        myfile" in Icon.exe. Usually stored in "City of Heroes\Data" *NOTE*:
        Your costume file is NOT the same as the .costume files that are saved
        from the Character Creator in Icon.exe. See
        http://www.cohtitan.com/forum/index.php?topic=11076.0 for more info.
-4. BACKUP your ParagonChat.db file! Jerrichas will also *try* to make a backup
+    b. If you have some weird installation of ParagonChat, you can set  PARAGON_CHAT_DB to your ParagonChat.db location. (usually that's
+       %%(APPDATA)s\Paragon Chat\Database\ParagonChat.db") I've already set it
+       there, so you usually don't have to change it.
+2. BACKUP your ParagonChat.db file! Jerrichas will also *try* to make a backup
    of the DB, but you never know what happens!
-5. Open up a shell prompt, and run me with 'python Jerrichas.py' or
-   'c:\Python34\python.exe Jerrichas.py', and follow the on-screen wizard.
-6. Please report your errors to me on the forums
-   ( http://www.cohtitan.com/forum/index.php?topic=11197.msg189486 )! This
-   program has really shakey error handling currently!
+3. Open up a shell prompt (Windows Key + R, type 'cmd.exe')
+3. Follow the on-screen wizard. Jerrichas currently only supports batch replace of a costumesave file over a given costume.
+4. Please report your errors to me on the forums
+   ( http://www.cohtitan.com/forum/index.php?topic=11197.msg189486 )!
 
 LEGAL: GPLv3. No warrenties. Use it, share it, hack it, but DO NOT sell it!
 Love <3 Jerricha, Summer of 2015\
@@ -31,30 +28,39 @@ Love <3 Jerricha, Summer of 2015\
 ###########################
 ### PROGRAM BEINGS HERE ###
 ###########################
-PARAGON_CHAT_DB = PARAGON_CHAT_DB.replace(os.path.sep, '/')
-COSTUME_FILE = COSTUME_FILE.replace(os.path.sep, '/')
-
 from io import StringIO
+import os
+import sys
 
 
-def verify_config():
+def get_from_config(config_file):
     """
-    Allows thread to continue executing if config passes checks,
-    otherwise, exit program and write new config file.
+    Performs config validation, and returns values from config.
+    If config validation fails (but not path validation), assume it's corrupt, make a new config file.
+    :returns: PARAGON_CHAT_DB, COSTUME_FILE if successful
     """
     from configparser import ConfigParser
-    config = ConfigParser()
+    config = ConfigParser(dict(APPDATA=os.environ['APPDATA']))
     try:
-        config.read('./jerrichas.config')
-        assert config.has_section('Jerrichas')
-        global PARAGON_CHAT_DB, COSTUME_FILE
-        PARAGON_CHAT_DB = PARAGON_CHAT_DB.replace(os.path.sep, '/')
-        COSTUME_FILE = COSTUME_FILE.replace(os.path.sep, '/')
+        config.read(config_file)
+        PARAGON_CHAT_DB = config.get("Jerrichas", "PARAGON_CHAT_DB")
+        COSTUME_FILE = config.get("Jerrichas", "COSTUME_FILE")
     except:
-        sys.exit(__doc__)
+        default_config = """[Jerrichas]
+COSTUME_FILE = Replace_Me
+PARAGON_CHAT_DB = %(APPDATA)s\Paragon Chat\Database\ParagonChat.db"""
+
+        f = open("./jerrichas.config", "w")
+        f.write(default_config)
+        f.close()
+        print(__doc__)
+        input("\nPress Enter to continue...!")
+        sys.exit(1)
+
+    return PARAGON_CHAT_DB, COSTUME_FILE
 
 
-def test_paths():
+def test_paths(PARAGON_CHAT_DB, COSTUME_FILE):
     try:
         assert os.path.exists(PARAGON_CHAT_DB) is True
     except Exception:
@@ -70,39 +76,53 @@ def test_paths():
     return True
 
 
-def read_costumepart(costume_file=COSTUME_FILE):
-    import csv
-    try:
-        costume_csv = csv.reader(open(costume_file, 'r'))
-        costume = map(
-            lambda row: dict(
-                part=row[0],
-                geom=row[1],
-                tex1=row[2],
-                tex2=row[3],
-                fx=row[39] if not row[39]=="0" else "",
-                displayname=row[4],
-                region=row[42],
-                bodyset=row[43],
-                # name=row[],
-                color1=row[5],
-                # color2=row[],
-                # color3=row[],
-                # color4=row[],
-            ),
-            costume_csv
-        )
-    except Exception as e:
-        sys.exit("Some kind of error with your costume file.\n{}".format(e))
-    return list(costume)
+class Costumesave(object):
+    """
+    Represents a file produced with the /costumesave command in Icon.exe
+    """
+    def __init__(self, costumesave):
+        """
+        :param costumesave: /costumesave file object
+        :type costumesave: file
+        """
+        self.costumesave = costumesave
+
+    def get_costumeparts(self):
+        """
+        :returns: a mapping of /costumesave elements to 
+        """
+        import csv
+        try:
+            costume_csv = csv.reader(open(self.costumesave), 'r')
+            costume = map(
+                lambda row: dict(
+                    part=row[0],
+                    geom=row[1],
+                    tex1=row[2],
+                    tex2=row[3],
+                    fx=row[39] if not row[39]=="0" else "",
+                    displayname=row[4],
+                    region=row[42],
+                    bodyset=row[43],
+                    # name=row[],
+                    color1=row[5],
+                    # color2=row[],
+                    # color3=row[],
+                    # color4=row[],
+                ),
+                costume_csv
+            )
+        except Exception as e:
+            sys.exit("Some kind of error with your costume file.\n{}".format(e))
+        return list(costume)
 
 
 class Database(object):
-    def __init__(self, db_fp=PARAGON_CHAT_DB):
+    def __init__(self, db_path):
         import sqlite3
         try:
-            self.db_fp = db_fp
-            self.conn = sqlite3.connect(self.db_fp)
+            self.db_path = db_path
+            self.conn = sqlite3.connect(self.db_path)
             self.conn.row_factory = self._dict_factory
             self.session = self.conn.cursor()
         except:
@@ -132,7 +152,7 @@ class Database(object):
         characters = self.session.execute("SELECT id, name FROM character WHERE account='{}'".format(account))
         return characters.fetchall()
 
-    def replace_costume(self, character_id, costume_id, costume_file=COSTUME_FILE):
+    def replace_costume(self, character_id, costume_id, costume_file):
         costumeparts = read_costumepart(costume_file)
         sql_script = StringIO("""\
 DELETE FROM costumepart
@@ -210,7 +230,7 @@ def event_loop(db):
 
     # Confirm Selection
     confirm = str(input("\nWe're about to replace {name}'s costume #{costume_id} with the /costumesave file '{COSTUME_FILE}'\nThis change is permanent, and may result in a corrupt DB file -- please make sure to backup your DB!\n(Jerricha's will also backup your DB in _backup\ParagonChat.db) \nDo you wish to proceed? (you must type exactly 'y' or 'yes') [ Yes / No ]: "
-        .format(COSTUME_FILE=COSTUME_FILE, costume_id=costume_id, name=character['name']))).lower()
+        .format(COSTUME_FILE=None, costume_id=costume_id, name=character['name']))).lower()
     if confirm == 'y' or confirm == 'yes':
         print("Backing up your DB to 'ParagonChat.db.jerrichas'...")
         db.make_backup()
@@ -223,9 +243,10 @@ def event_loop(db):
 
 def main():
     print("### <3 Jerricha's ParagonChat Costume Utility v{} <3 ###".format(VERSION))
-    verify_config()
-    # test_paths()
-    # db = Database()
+    PARAGON_CHAT_DB, COSTUME_FILE = get_from_config('./jerrichas.config')
+    test_paths(PARAGON_CHAT_DB, COSTUME_FILE)
+    costumesave = Costumesave(COSTUME_FILE)
+    db = Database(PARAGON_CHAT_DB)
     # event_loop(db)
 
 

@@ -1,3 +1,6 @@
 _backup/
 build/
 *.spec
+*__pycache__*
+*.pyo
+*.pyc
