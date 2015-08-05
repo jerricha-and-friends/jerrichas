@@ -160,15 +160,15 @@ class Database(object):
             sys.exit("ERROR: Jerrichas terminating\nUnable to make a backup of your DB.")
         return True
 
-    def get_accounts(self):
+    def get_account_names(self):
         accounts = self.session.execute("SELECT id, name FROM account")
         return accounts.fetchall()
 
-    def get_characters(self, account):
+    def get_character_names(self, account):
         characters = self.session.execute("SELECT id, name FROM character WHERE account='{}'".format(account))
         return characters.fetchall()
 
-    def replace_costume_parts(self, costumesave, character_id, costume_id):
+    def query_replace_parts(self, costumesave, character_id, costume_id):
         """
         Performs the costume replacement query against the ParagonChat db.
 
@@ -199,7 +199,7 @@ REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, co
 
         return(sql_script)
 
-    def replace_costume(self, costumesave, character_id, costume_id):
+    def query_replace_costume(self, costumesave, character_id, costume_id):
         """
         Writes full-costume replacement query against the ParagonChat db.
 
