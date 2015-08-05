@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os, sys
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 __doc__ = """\
 ##### Jerricha's ParagonChat Costume Utility v.{} Info ######
 Jerrichas.py will automatically replace a costume in your DB with a
@@ -28,8 +28,6 @@ Instructions:
 LEGAL: GPLv3. No warrenties. Use it, share it, hack it, but DO NOT sell it!
 Love <3 Jerricha, Summer of 2015\
 """.format(VERSION)
-PARAGON_CHAT_DB = os.getenv('appdata') + """\Paragon Chat\Database\ParagonChat.db"""
-COSTUME_FILE = """Replace_Me"""
 ###########################
 ### PROGRAM BEINGS HERE ###
 ###########################
@@ -37,6 +35,23 @@ PARAGON_CHAT_DB = PARAGON_CHAT_DB.replace(os.path.sep, '/')
 COSTUME_FILE = COSTUME_FILE.replace(os.path.sep, '/')
 
 from io import StringIO
+
+
+def verify_config():
+    """
+    Allows thread to continue executing if config passes checks,
+    otherwise, exit program and write new config file.
+    """
+    from configparser import ConfigParser
+    config = ConfigParser()
+    try:
+        config.read('./jerrichas.config')
+        assert config.has_section('Jerrichas')
+        global PARAGON_CHAT_DB, COSTUME_FILE
+        PARAGON_CHAT_DB = PARAGON_CHAT_DB.replace(os.path.sep, '/')
+        COSTUME_FILE = COSTUME_FILE.replace(os.path.sep, '/')
+    except:
+        sys.exit(__doc__)
 
 
 def test_paths():
@@ -119,14 +134,13 @@ class Database(object):
 
     def replace_costume(self, character_id, costume_id, costume_file=COSTUME_FILE):
         costumeparts = read_costumepart(costume_file)
-        sql_script = StringIO("BEGIN;")
+        sql_script = StringIO("""\
+DELETE FROM costumepart
+    WHERE character='{character_id}'
+        AND costume='{costume_id}';""")
         for i in costumeparts:
             sql =\
                 """\
-DELETE FROM costumepart
-    WHERE character='{character_id}'
-        AND costume='{costume_id}'
-        AND part='{part}' ;
 REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, color1, character, costume, part)
     VALUES ('{geom}', '{tex1}', '{tex2}', '{fx}', '{displayname}', '{region}', '{bodyset}', '{color1}', '{character_id}', '{costume_id}', '{part}');\
                 """
@@ -201,7 +215,7 @@ def event_loop(db):
         print("Backing up your DB to 'ParagonChat.db.jerrichas'...")
         db.make_backup()
         print("Performing costume replace on 'ParagonChat.db'...")
-        db.replace_costume(character_id=character_id, costume_id=character_id)
+        db.replace_costume(character_id=character_id, costume_id=costume_id)
         print("DONE! Thanks for using Jerricha's!")
     else:
         print("\n\nNothing was modified in your DB. Thanks for using Jerricha's!")
@@ -209,11 +223,10 @@ def event_loop(db):
 
 def main():
     print("### <3 Jerricha's ParagonChat Costume Utility v{} <3 ###".format(VERSION))
-    if COSTUME_FILE == "Replace_Me":
-        sys.exit(__doc__)
-    test_paths()
-    db = Database()
-    event_loop(db)
+    verify_config()
+    # test_paths()
+    # db = Database()
+    # event_loop(db)
 
 
 if __name__ == '__main__':

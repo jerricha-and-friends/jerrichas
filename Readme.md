@@ -1,5 +1,9 @@
 Introducing: *Jerricha's*, a ParagonChat Database Utility, something to help us nerdy DB hackers automate our hacking.
 
+https://pypi.python.org/pypi/virtualenvwrapper-win
+set "TCL_LIBRARY=C:\Python34\tcl\tcl8.6"
+set "TK_LIBRARY=C:\Python34\tcl\tk8.5"
+
 ##What does *Jerricha's* do?
 *Jerricha's* is an command-line tool that simplifies and automates DB costume hacking. *Jerricha's* plugs your /costumesave file straight into your ParagonChat database, without you having to manually query and figure out which fields go where.
 
