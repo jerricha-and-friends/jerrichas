@@ -56,7 +56,8 @@ You absolutely can do this manually, as the community has been so far. However, 
 * Changes your characters' names, class, origin, description, battlecry, etc.
 
 ###Upcoming features:
-* ~~Compilation into a .exe~~ (v0.2.0!)
+* ~~Compilation into a .exe~~ (v0.2.0)
+* ~~Cherry-pick mode~~ (v0.2.0)
 * Full API support for other developers/coders/hackers
 * Mac support
 * JerrichaQT GUI
