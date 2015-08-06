@@ -4,6 +4,6 @@ build/
 *__pycache__*
 *.pyo
 *.pyc
-jerrichas.config
+jerrichas.ini
 *.db-shm
 *.db-wal

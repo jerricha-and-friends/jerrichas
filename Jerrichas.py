@@ -1,22 +1,25 @@
 #!/usr/bin/env python
+import sys
+sys.path.insert(0, '.')
 VERSION = "0.2.0"
 __doc__ = """
 ##### Jerricha's ParagonChat Costume App v.{} ######
 Jerrichas.py will automatically replace a costume in your DB with a
 "costumesave" save.
 Instructions:
-1. Open up jerrichas.config in your favorite text editor (I've created it in this folder).
+1. Open up jerrichas.ini in your favorite text editor (I've created it in this folder).
     a. Set COSTUME_FILE to your file that you created with "/costumesave
        myfile" in Icon.exe. Usually stored in "City of Heroes\Data" *NOTE*:
        Your costume file is NOT the same as the .costume files that are saved
        from the Character Creator in Icon.exe. See
        http://www.cohtitan.com/forum/index.php?topic=11076.0 for more info.
-    b. If you have some weird installation of ParagonChat, you can set  PARAGON_CHAT_DB to your ParagonChat.db location. (usually that's
+    b. If you have some weird installation of ParagonChat, you can set
+       PARAGON_CHAT_DB to your ParagonChat.db location. (usually that's
        %APPDATA%\Paragon Chat\Database\ParagonChat.db") I've already set it
        there, so you usually don't have to change it.
 2. BACKUP your ParagonChat.db file! Jerrichas will also *try* to make a backup
    of the DB, but you never know what happens!
-3. Follow the on-screen wizard.
+3. CLOSE ParagonChat, then run Jerrichas. Follow the on-screen wizard.
 4. Please report your errors to me on the forums
    ( http://www.cohtitan.com/forum/index.php?topic=11197.msg189486 )!
 
@@ -25,7 +28,6 @@ Love <3 Jerricha, Summer of 2015
 """.format(VERSION)
 from io import StringIO
 import os
-import sys
 
 def quit_app(*msgs):
     [print(i) for i in msgs]
@@ -48,8 +50,7 @@ def get_from_config(config_file):
         default_config = """[Jerrichas]
 COSTUME_FILE = _Replace_Me_
 PARAGON_CHAT_DB = %(APPDATA)s\Paragon Chat\Database\ParagonChat.db"""
-
-        f = open("./jerrichas.config", "w")
+        f = open("./jerrichas.ini", "w")
         f.write(default_config)
         f.close()
         quit_app(__doc__)
@@ -107,7 +108,7 @@ class Costumesave(object):
                 costume_csv
             )
         except Exception as e:
-            sys.exit("Some kind of error with your costume file.\n{}".format(e))
+            quit_app("Some kind of error with your costume file.\n{}".format(e))
         return list(costume)
 
 
@@ -120,7 +121,7 @@ class Database(object):
             self.conn.row_factory = self._dict_factory
             self.session = self.conn.cursor()
         except:
-            sys.exit("ERROR: Jerrichas terminating\nSomething went wrong with the DB.")
+            quit_app("ERROR: Jerrichas terminating\nSomething went wrong with the DB.")
 
     def _dict_factory(self, cursor, row):
         d = {}
@@ -144,9 +145,8 @@ class Database(object):
             self.conn.commit()
             return True
         except Exception as e:
-            print(e)
             self.session.execute("ROLLBACK;")
-            return False
+            quit_app(e, "Please report this to Jerricha!")
 
     def make_backup(self):
         "Backs-up yo shit."
@@ -155,7 +155,7 @@ class Database(object):
         try:
             copy(self.db_path, backup_fp)
         except IOError:
-            sys.exit("ERROR: Jerrichas terminating\nUnable to make a backup of your DB.")
+            quit_app("ERROR: Jerrichas terminating\nUnable to make a backup of your DB.")
         return True
 
     def get_account_names(self):
@@ -234,14 +234,6 @@ REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, co
             sql_script.write(sql)
         return(sql_script)
 
-def _display_choice(table, title):
-    display = StringIO()
-    display.write("====={title}=====\n".format(title=title.capitalize()))
-    for row in table:
-        display.write("{id}: {name}\n".format(**row))
-    display.write("\n")
-    return display.getvalue()
-
 def event_loop(db, costumesave):
     # Choose Mode
     while True:
@@ -263,7 +255,11 @@ def event_loop(db, costumesave):
 
 3: Help
     Shows you the help screen again and exit =)
-""")
+
+( Ctrl+C to close me any time )
+
+[Costumesave file]: {costumesave}
+""".format(costumesave=costumesave.path))
         try:
             mode = int(input("Select mode [1-3]: "))
             assert mode in [m['id'] for m in modes]
@@ -312,10 +308,10 @@ def event_loop(db, costumesave):
             break
         except:
             print("Invalid input.")
-    sys.exit()
+
     # Confirm Selection
-    confirm = str(input("\n({mode})\nWe're about to replace {name}'s costume #{costume_id} with the /costumesave file '{COSTUME_FILE}'\nThis change is permanent, and may result in a corrupt DB file -- please make sure to backup your DB!\n(Jerricha's will also backup your DB in _backup\ParagonChat.db) \nDo you wish to proceed? (you must type exactly 'y' or 'yes') [ Yes / No ]: "
-        .format(mode=modep(mode), COSTUME_FILE=costumesave.fp, costume_id=costume_id, name=character['name']))).lower()
+    confirm = str(input("\n({mode})\nWe're about to alter {name}'s costume #{costume_id} with data from the costumesave file '{COSTUME_FILE}'\nThis change is permanent, and *may* result in a corrupt DB file -- please make sure to backup your DB!\n(Jerricha's will also *try* to backup your DB at ParagonChat.db.jerrichas)\nDo you wish to proceed? (you must type exactly 'y' or 'yes') [ Yes / No ]: "
+        .format(mode=modep(mode), COSTUME_FILE=costumesave.path, costume_id=costume_id, name=character['name']))).lower()
     if confirm == 'y' or confirm == 'yes':
         print("Backing up your DB to 'ParagonChat.db.jerrichas'...")
         db.make_backup()
@@ -323,21 +319,18 @@ def event_loop(db, costumesave):
         if mode == 1:
             print("\nPerforming full costume replace...")
             query = db.query_replace_costume(costumesave=costumesave, character_id=character_id, costume_id=costume_id)
-            print(query.getvalue())
-            # db._transact_query(query)
+            db._transact_query(query)
         elif mode == 2:
-            print("\nPerforming cherry-pick part replace...")
+            print("\nPerforming cherry-pick costume part replace...")
             query = db.query_replace_parts(costumesave=costumesave, character_id=character_id, costume_id=costume_id)
-            print(query.getvalue())
-            # db._transact_query(query)
+            db._transact_query(query)
         print("DONE! Thanks for using Jerricha's!")
     else:
         print("\n\nNothing was modified in your DB. Thanks for using Jerricha's!")
 
-
 def main():
     print("### <3 Jerricha's ParagonChat DB Costume Utility v{} <3 ###".format(VERSION))
-    config = get_from_config('./jerrichas.config')
+    config = get_from_config('./jerrichas.ini')
     test_path(config)
     costumesave = Costumesave(config['COSTUME_FILE'])
     db = Database(config['PARAGON_CHAT_DB'])

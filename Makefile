@@ -6,6 +6,9 @@ PROJECT_NAME=Jerrichas
 install:
 	python setup.py install
 
+run:
+	python jerrichas.py
+
 test-all:
 	nosetests -w testing -c etc/test-all.config
 
@@ -22,4 +25,4 @@ compile-win:
 	# pyinstaller --onefile --icon=docs/FILE.ico Jerrichas.py
 	pyinstaller --clean --onefile Jerrichas.py
 
-.PHONY: install clean compile-win test
+.PHONY: install clean compile-win test-all test-one run
