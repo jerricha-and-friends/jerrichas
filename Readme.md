@@ -61,3 +61,4 @@ You absolutely can do this manually, as the community has been so far. However, 
 * Full API support for other developers/coders/hackers
 * Mac support
 * JerrichaQT GUI
+* Automated testing
