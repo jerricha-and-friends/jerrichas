@@ -46,10 +46,8 @@ workon jerrichas
 2. Select Cherry-Pick mode from the menu =)
 * Seriously, *don't* select Batch with a cherrypicked file, or you will seriously screw up your costume.
 
-##I'm a hacker / programmer / techie / SQL guru/ curious, why are there so many LoCs? Do I really need this whole program?
-No. You are likely only going to be interested in the **Database** class, and the **read_costumepart** function. These do the heavy lifting and expose an API both to the database and /costumesve file. The rest of the program handles validation, tests, and user event threading. >80% of this program is for user interaction.
-
-In an upcoming version, Jerrichas will feature full API support to the ParagonChat database, so you could build your app ontop of Jerrichas.
+##I'm a poweruser/hacker/programmer/techie, and I can roll my own SQL. Why do I need Jerrichas?
+You absolutely can do this manually, as the community has been so far. However, in addition speeding-up and simplifying DB hacking, Jerrichas will feature full API support to the ParagonChat database, so you could build your app / l33t h4x ontop of Jerrichas.
 
 
 ##Things *Jerrichas* currently does *not* do, but will in the future:
