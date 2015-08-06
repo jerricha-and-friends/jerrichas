@@ -5,7 +5,11 @@ from unittest import TestCase
 PATH = os.path.split(os.path.realpath(__file__))[0]
 
 class DatabaseTestCase(TestCase):
-    pass
+    def setUp(self):
+        self.db = None
+
+    def tearDown(self):
+        pass
 
 class CostumesaveTestCase(TestCase):
     pass
