@@ -17,12 +17,11 @@ test-one:
 
 clean:
 	find . | grep -E "(__pycache__|\.spec|\.pyc|\.pyo$\)" | xargs rm -rf
-	find . | grep -E "(build|dist)" | xargs rm -rf
+	find . | grep -E "(build)" | xargs rm -rf
 
 compile-win:
 	make clean
-	# pyinstaller --debug --onefile Jerrichas.py
-	# pyinstaller --clean --onefile Jerrichas.py
+	find . | grep -E "(build|dist)" | xargs rm -rf
 	pyinstaller --clean --onefile --icon=docs/jerrichas.ico Jerrichas.py
 
 .PHONY: install clean compile-win test-all test-one run
