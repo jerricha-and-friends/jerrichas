@@ -2,11 +2,12 @@
 *Jerricha's*, a ParagonChat Database App, something to help us nerdy DB hackers automate our hacking.
 
 ##What does *Jerricha's* do?
-*Jerricha's* is an command-line tool that simplifies and automates DB costume hacking. *Jerricha's* plugs your /costumesave file straight into your ParagonChat database, without you having to manually query and figure out which fields go where.
+*Jerricha's* is an command-line tool that simplifies and automates [DB costume hacking](http://www.cohtitan.com/forum/index.php/topic,11076.0.html). Jerrichas assumes you already have basic familiarity with at least the concept of DB costume hacking.
 
+*Jerricha's* plugs your costumesave file straight into your ParagonChat database, without you having to manually query and figure out which fields go where.
 
 ##How does it work?
-*Jerrichas* batch converts those /costumesave files into a long SQL query (the langauge ParagonChat database uses), and executes it on the ParagonChat database. This assumes that you've already completely designed your costume in Icon.exe, and have /costumesave'd it.
+*Jerrichas* batch converts those costumesave files into a long SQL query (the langauge ParagonChat database uses), and executes it on the ParagonChat database. This assumes that you've already completely designed your costume in Icon.exe, and have /costumesave'd it.
 
 Jerrichas works both at the batch level (replace an entire costume), or at the part level (replace just one part of that costume).
 
