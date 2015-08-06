@@ -22,7 +22,7 @@ clean:
 compile-win:
 	make clean
 	# pyinstaller --debug --onefile Jerrichas.py
-	# pyinstaller --onefile --icon=docs/FILE.ico Jerrichas.py
-	pyinstaller --clean --onefile Jerrichas.py
+	# pyinstaller --clean --onefile Jerrichas.py
+	pyinstaller --clean --onefile --icon=docs/jerrichas.ico Jerrichas.py
 
 .PHONY: install clean compile-win test-all test-one run

@@ -29,10 +29,10 @@ Love <3 Jerricha, Summer of 2015
 from io import StringIO
 import os
 
-def quit_app(*msgs):
+def quit_app(*msgs, exit_code=1):
     [print(i) for i in msgs]
     input("Press Enter to quit...")
-    sys.exit(1)
+    sys.exit(exit_code)
 
 def get_from_config(config_file):
     """
@@ -324,9 +324,9 @@ def event_loop(db, costumesave):
             print("\nPerforming cherry-pick costume part replace...")
             query = db.query_replace_parts(costumesave=costumesave, character_id=character_id, costume_id=costume_id)
             db._transact_query(query)
-        print("DONE! Thanks for using Jerricha's!")
+        quit_app("DONE! Thanks for using Jerricha's!", exit_code=0)
     else:
-        print("\n\nNothing was modified in your DB. Thanks for using Jerricha's!")
+        quit_app("\n\nNothing was modified in your DB. Thanks for using Jerricha's!", exit_code=0)
 
 def main():
     print("### <3 Jerricha's ParagonChat DB Costume Utility v{} <3 ###".format(VERSION))

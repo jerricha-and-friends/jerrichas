@@ -7,3 +7,5 @@ build/
 jerrichas.ini
 *.db-shm
 *.db-wal
+Thumbs.db
+*~
