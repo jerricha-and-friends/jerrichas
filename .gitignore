@@ -5,3 +5,5 @@ build/
 *.pyo
 *.pyc
 jerrichas.config
+*.db-shm
+*.db-wal

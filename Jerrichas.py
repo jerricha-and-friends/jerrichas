@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 VERSION = "0.2.0"
-__doc__ = """\
+__doc__ = """
 ##### Jerricha's ParagonChat Costume App v.{} ######
 Jerrichas.py will automatically replace a costume in your DB with a
 "costumesave" save.
-
 Instructions:
 1. Open up jerrichas.config in your favorite text editor (I've created it in this folder).
     a. Set COSTUME_FILE to your file that you created with "/costumesave
@@ -13,25 +12,24 @@ Instructions:
        from the Character Creator in Icon.exe. See
        http://www.cohtitan.com/forum/index.php?topic=11076.0 for more info.
     b. If you have some weird installation of ParagonChat, you can set  PARAGON_CHAT_DB to your ParagonChat.db location. (usually that's
-       %%(APPDATA)s\Paragon Chat\Database\ParagonChat.db") I've already set it
+       %APPDATA%\Paragon Chat\Database\ParagonChat.db") I've already set it
        there, so you usually don't have to change it.
 2. BACKUP your ParagonChat.db file! Jerrichas will also *try* to make a backup
    of the DB, but you never know what happens!
-3. Follow the on-screen wizard. Jerrichas currently only supports batch replace of a costumesave file over a given costume.
+3. Follow the on-screen wizard.
 4. Please report your errors to me on the forums
    ( http://www.cohtitan.com/forum/index.php?topic=11197.msg189486 )!
 
 LEGAL: GPLv3. No warrenties. Use it, share it, hack it, but DO NOT sell it!
-Love <3 Jerricha, Summer of 2015\
+Love <3 Jerricha, Summer of 2015
 """.format(VERSION)
 from io import StringIO
 import os
 import sys
 
 def quit_app(*msgs):
-    for i in msgs:
-        print(i)
-    input("\nPress Enter to continue...!")
+    [print(i) for i in msgs]
+    input("Press Enter to quit...")
     sys.exit(1)
 
 def get_from_config(config_file):
@@ -68,7 +66,7 @@ def test_path(config):
         except Exception:
             quit_app(
                 "ERROR: {k} path is invalid.\nYou provided:\n\t{v}"
-                .format(k=k.replace('\\\\', os.path.sep), v=v))
+                .format(k=k, v=v))
     return True
 
 
@@ -139,7 +137,7 @@ class Database(object):
         """
         transaction = StringIO()
         transaction.write("BEGIN TRANSACTION;")
-        transaction.write(sql_script)
+        transaction.write(sql_script.getvalue())
         transaction.write("COMMIT;")
         try:
             self.session.executescript(sql_script.getvalue())
@@ -164,8 +162,8 @@ class Database(object):
         accounts = self.session.execute("SELECT id, name FROM account")
         return accounts.fetchall()
 
-    def get_character_names(self, account):
-        characters = self.session.execute("SELECT id, name FROM character WHERE account='{}'".format(account))
+    def get_characters(self, account):
+        characters = self.session.execute("SELECT id, name, origin, class, curcostume FROM character WHERE account='{}'".format(account))
         return characters.fetchall()
 
     def query_replace_parts(self, costumesave, character_id, costume_id):
@@ -174,11 +172,11 @@ class Database(object):
 
         Intended use for "cherry-pick mode".
 
-        :param costumesave: a Costumesave instance
+        :param costumesave: a jerrichas.Costumesave object
         :param chracter_id: Character ID
         :param costume_id: Costume ID
 
-        :returns: A StringIO of an SQLScript.
+        :returns: A StringIO of an SQLite Script.
         """
         costumeparts = costumesave.get_costumeparts()
         sql_script = StringIO()
@@ -205,11 +203,11 @@ REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, co
 
         Intended use for "batch mode".
 
-        :param costumesave: a Costumesave instance
+        :param costumesave: a jerrichas.Costumesave object
         :param chracter_id: Character ID
         :param costume_id: Costume ID
 
-        :returns: A StringIO of an SQLScript.
+        :returns: A StringIO of an SQLite Script.
         """
         costumeparts = costumesave.get_costumeparts()
         sql_script = StringIO()
@@ -236,49 +234,57 @@ REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, co
             sql_script.write(sql)
         return(sql_script)
 
-
-def _validate_choice(choice, lst):
-    return True if len(list(filter(lambda row: choice == str(row['id']), lst))) == 1 else False
-
-
 def _display_choice(table, title):
-    display = StringIO("")
+    display = StringIO()
     display.write("====={title}=====\n".format(title=title.capitalize()))
     for row in table:
         display.write("{id}: {name}\n".format(**row))
     display.write("\n")
     return display.getvalue()
 
-
 def event_loop(db, costumesave):
-    # Choose Mode event-loop
+    # Choose Mode
     while True:
+        modes = [
+            {'id': 1, 'alias': "batch", 'str': "Batch Mode"},
+            {'id': 2, 'alias': "cherry-pick", 'str': "Cherry-Pick Mode"},
+            {'id': 3, 'alias': "help", 'str': "Help Mode"},
+        ]
+        modep = lambda id: [m['str'] for m in modes if m['id'] == id][0]
         print("""\
 =======**Mode Selection**=======
 1: Batch Mode
-    Jerricha's will replace an entire costume with the costumesave file.
+    Jerricha's will replace an entire costume with the full costumesave file.
 
 2: Cherry-Pick Mode
-    You curated your costumesave file to ONLY include the part(s) you want.
-    Each part is put on its own line. Jerricha's will intelligently replace
-    only those parts that need replacing for the costume of your choosing.
+    You have curated your costumesave file to only include the costume part(s)
+    you want. Jerricha's will intelligently replace only those parts that need
+    replacing for the costume of your choosing.
+
+3: Help
+    Shows you the help screen again and exit =)
 """)
         try:
-            mode = input("Select mode [1-2]: ")
-            assert mode in range(1, 2)
+            mode = int(input("Select mode [1-3]: "))
+            assert mode in [m['id'] for m in modes]
+            break
         except:
                 print("Invalid input.")
+    if mode == 3:
+        quit_app(__doc__)
 
-    accounts = db.get_accounts()
+    # Choose Account
+    accounts = db.get_account_names()
     if len(accounts) == 1:
         account_id = 1
     else:
-        # Choose Account event-loop
         while True:
-            print(_display_choice(accounts, "accounts"))
+            print("\n===== Accounts =====")
+            [print("{id}: {name}\n".format(**acc)) for acc in accounts]
             try:
-                account_id = str(input("Select your account ID [1-{}]: ".format(len(accounts))))
-                assert _validate_choice(account_id, accounts) is True
+                account_id = int(input("Select your account ID [1-{}]: "
+                    .format(len(accounts))))
+                assert account_id in [acc['id'] for acc in accounts]
                 break
             except:
                 print("Invalid input.")
@@ -286,39 +292,51 @@ def event_loop(db, costumesave):
     # Choose Character event-loop
     characters = db.get_characters(account_id)
     while True:
-        print(_display_choice(characters, "characters"))
+        print("\n============ Characters ============")
+        for character in characters:
+            character['class'] = character['class'].split("Class_")[-1].replace("_", " ")
+            print("{id}: {name} - a {origin} {class}".format(**character))
         try:
-            character_id = str(input("Select your character ID [1-{}]: ".format(len(characters))))
-            assert _validate_choice(character_id, characters) is True
+            character_id = int(input("\n({mode})\nSelect your character ID [1-{total}]: ".format(mode=modep(mode), total=len(characters))))
+            assert character_id in [char['id'] for char in characters]
             break
         except:
             print("Invalid input.")
 
     # Choose Costume event-loop
-    character = db.session.execute("SELECT name, class, curcostume FROM character WHERE id='{}'".format(character_id)).fetchone()
+    character = [char for char in characters if char['id'] == character_id][0]
     while True:
         try:
-            costume_id = str(input("\nYou have selected: {name} ({class})\nSelect costume ID to replace [0-9, current: {curcostume}]: ".format(**character)))
-            assert costume_id in [str(i) for i in range(10)]
+            costume_id = int(input("\n({mode})\nYou have selected: {name} ({class})\nSelect costume ID to modify [0-9, current: {curcostume}]: ".format(mode=modep(mode), **character)))
+            assert costume_id in range(10)
             break
         except:
             print("Invalid input.")
-
+    sys.exit()
     # Confirm Selection
-    confirm = str(input("\nWe're about to replace {name}'s costume #{costume_id} with the /costumesave file '{COSTUME_FILE}'\nThis change is permanent, and may result in a corrupt DB file -- please make sure to backup your DB!\n(Jerricha's will also backup your DB in _backup\ParagonChat.db) \nDo you wish to proceed? (you must type exactly 'y' or 'yes') [ Yes / No ]: "
-        .format(COSTUME_FILE=costumesave.fp, costume_id=costume_id, name=character['name']))).lower()
+    confirm = str(input("\n({mode})\nWe're about to replace {name}'s costume #{costume_id} with the /costumesave file '{COSTUME_FILE}'\nThis change is permanent, and may result in a corrupt DB file -- please make sure to backup your DB!\n(Jerricha's will also backup your DB in _backup\ParagonChat.db) \nDo you wish to proceed? (you must type exactly 'y' or 'yes') [ Yes / No ]: "
+        .format(mode=modep(mode), COSTUME_FILE=costumesave.fp, costume_id=costume_id, name=character['name']))).lower()
     if confirm == 'y' or confirm == 'yes':
         print("Backing up your DB to 'ParagonChat.db.jerrichas'...")
         db.make_backup()
-        print("Performing costume replace on 'ParagonChat.db'...")
-        db.replace_costume(character_id=character_id, costume_id=costume_id)
+        print("({})".format(modep(mode)))
+        if mode == 1:
+            print("\nPerforming full costume replace...")
+            query = db.query_replace_costume(costumesave=costumesave, character_id=character_id, costume_id=costume_id)
+            print(query.getvalue())
+            # db._transact_query(query)
+        elif mode == 2:
+            print("\nPerforming cherry-pick part replace...")
+            query = db.query_replace_parts(costumesave=costumesave, character_id=character_id, costume_id=costume_id)
+            print(query.getvalue())
+            # db._transact_query(query)
         print("DONE! Thanks for using Jerricha's!")
     else:
         print("\n\nNothing was modified in your DB. Thanks for using Jerricha's!")
 
 
 def main():
-    print("### <3 Jerricha's ParagonChat Costume Utility v{} <3 ###".format(VERSION))
+    print("### <3 Jerricha's ParagonChat DB Costume Utility v{} <3 ###".format(VERSION))
     config = get_from_config('./jerrichas.config')
     test_path(config)
     costumesave = Costumesave(config['COSTUME_FILE'])
