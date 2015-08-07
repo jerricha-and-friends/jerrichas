@@ -28,6 +28,9 @@
 
 Jerrichas works both at the batch level (replace an entire costume), or at the part level (replace just one part of that costume).
 
+## I'm a total newbie to DBing and I have no idea what you just said. Can you just take me to the thing?
+YES: [The Ultimate Guide "DBing your Costume" Using Jerrichas](docs/guide-to-jerrichas.md)
+
 ## How do I run Jerrichas?
 
 ### From .exe
