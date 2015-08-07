@@ -13,6 +13,7 @@ By Jerricha
 	- [Step 5: Re-Run Jerrichas](#step-5-re-run-jerrichas)
 - [(Advanced) How to use Cherry-Pick Mode](#advanced-how-to-use-cherry-pick-mode)
 - [A few caveats](#a-few-caveats)
+
 <!-- /TOC -->
 
 # What is "DBing your costume"?
