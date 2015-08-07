@@ -19,9 +19,11 @@
 <!-- /TOC -->
 
 ## What does *Jerricha's* do?
-*Jerricha's* is an command-line tool that simplifies and automates [DB costume hacking](http://www.cohtitan.com/forum/index.php/topic,11076.0.html). Jerrichas assumes you already have basic familiarity with at least the concept of DB costume hacking.
+*Jerricha's* is an shell app that simplifies and automates [DB costume hacking](http://www.cohtitan.com/forum/index.php/topic,11076.0.html).
 
-*Jerricha's* plugs your costumesave file straight into your ParagonChat database, without you having to manually query and figure out which fields go where.
+*Jerricha's* imports costumesave files straight into your ParagonChat database, without you having to manually query and figure out which fields go where.
+
+I also wrote a complete newbie and idiot-proof guide to DB hacking with Jerrichas: [The Ultimate Guide "DBing your Costume" Using Jerrichas](docs/guide-to-jerrichas.md)
 
 ## How does it work?
 *Jerrichas* batch converts those costumesave files into a long SQL query (the langauge ParagonChat database uses), and executes it on the ParagonChat database. This assumes that you've already completely designed your costume in Icon.exe, and have /costumesave'd it.
@@ -29,7 +31,7 @@
 Jerrichas works both at the batch level (replace an entire costume), or at the part level (replace just one part of that costume).
 
 ## I'm a total newbie to DBing and I have no idea what you just said. Can you just take me to the thing?
-YES: [The Ultimate Guide "DBing your Costume" Using Jerrichas](docs/guide-to-jerrichas.md)
+YES, just read this: [The Ultimate Guide "DBing your Costume" Using Jerrichas](docs/guide-to-jerrichas.md)
 
 ## How do I run Jerrichas?
 
@@ -41,11 +43,11 @@ YES: [The Ultimate Guide "DBing your Costume" Using Jerrichas](docs/guide-to-jer
 
 1. Install [Python 3](https://www.python.org/downloads/)
 2. Install [git](https://msysgit.github.io/)
-3. Clone repo
+3. Clone the repo
 ```
 git clone https://github.com/Jerricha/jerrichas
 ```
-4. (Optional) Install [virtualenvwrapper](https://pypi.python.org/pypi/virtualenvwrapper-win), create virtualenvironment
+4. (Optional) Install [virtualenvwrapper](https://pypi.python.org/pypi/virtualenvwrapper-win), a create virtualenvironment
 ```
 cd jerrichas
 pip install virtualenvwrapper-win

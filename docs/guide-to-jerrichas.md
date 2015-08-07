@@ -57,7 +57,7 @@ Of course, you can name your `costumesave` file it whatever you want, as long as
 
 
 ## Step 4: Configure Jerrichas
-1. Download and save [Jerrichas.exe](../dist/Jerrichas.exe).
+1. Click here: [Jerrichas.exe](../dist/Jerrichas.exe), and then click "View Raw" to download Jerrichas. Save it somewhere!
 2. Double-Click on `Jerrichas.exe` and read the on-screen instructions (there may be some overlap with this guide.)
   * *NOTE*: Jerrichas is a console app, meaning it runs in a shell window. It also might take a few seconds to load. Please be patient - it's not broken!
 3. *Configuration*: Open `jerrichas.ini` in notepad  (`Jerrichas.exe` *just* created it), and set **`COSTUME_FILE`** to the path to your **`costumefile`** you made. For example, my `jerrichas.ini` looks like this:
@@ -82,6 +82,8 @@ PARAGON_CHAT_DB = %(APPDATA)s\Paragon Chat\Database\ParagonChat.db
   * *Note*: Costume indices begin at 0 and end in 9. 0th is the topmost-left, and 9th is the bottom-most right.
   * Be sure to read the [caveats](#a-few-caveats).
 6. Choose Yes to confirm. You're done. Enjoy!
+7. Please report any bugs to me. Also, if you're not clear on something, let me know! Jerrichas, and this guide is supposed to be as easy as to follow as possible. I'm in-game as @Jerricha, and you can also post to the thread on the forums [Jerricha's, A Simplified ParagonChat Database App](http://www.cohtitan.com/forum/index.php/topic,11197.msg189486.html)
+  * (Optional) If you open up a Github issue for the bug, I'll be really impressed!
 
 # (Advanced) How to use Cherry-Pick Mode
 1. Open up your **`costumesave`** file in your favorite text editor.
@@ -95,4 +97,4 @@ PARAGON_CHAT_DB = %(APPDATA)s\Paragon Chat\Database\ParagonChat.db
 As of Jerrichas v0.2.0, Jerrichas cannot:
   * detect what gender your costume.
   * cannot change your costume proportions
-Thus, make sure your original ParagonChat character costume has the right gender and proportions before you replace it with a costumesave file.
+Thus, make sure your original ParagonChat character costume has the right gender and proportions before you replace it with a `costumesave` file.
