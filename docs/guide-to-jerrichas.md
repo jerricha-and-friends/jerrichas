@@ -52,7 +52,7 @@ This will give you access to the CoX console.
 costumesave my_awesome_costume
 ```
 Of course, you can name your `costumesave` file it whatever you want, as long as you remember it.
-  * *NOTE*: your `costumesave` file is usually saved in your `City of Heroes\Data` folder
+  * *NOTE*: your `costumesave` file is usually saved in your `City of Heroes\Data` folder... but it may not be. You can do a quick search for the file using the Windows Explorer search feature.
 3. This is your **costumesave** file that stores all the data about the costume you just made.
   * *Aside*: If you're curious, costumesave files are in a format that we call [**CSV**](http://edoceo.com/utilitas/csv-file-format), or comma-separated-values. Think of it like a spreadsheet without the column headers. If you want to inspect them, you can use LibreOffice Calc or MS Excel by importing them as a CSV file.
 
