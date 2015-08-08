@@ -1,4 +1,11 @@
 # Jerricha's Changelog
+## 0.3.0 (08-08-2015)
+### Bug-fixes
+* Fixed bug (#6) whereby secondary colors weren't being updated in the DB.
+### API
+* Refactored Costumesave and Database classes into jerrichas.CostumeCSV and jerrichas.ParagonChatDB
+
+
 ## 0.2.1 (08-07-2015)
 ### UI
 * Updated main mode display to mark Cherry-pick mode as "advanced"
