@@ -196,7 +196,7 @@ def main():
 
     from jerrichas import CostumeCSV, ParagonChatDB
     try:
-        costumesave = CostumeCSV(config['COSTUME_FILE'])
+        costumesave = CostumeCSV(open(config['COSTUME_FILE'], 'r'))
     except Exception as e:
         quit_app("Some kind of error with your costume file.", e)
 
