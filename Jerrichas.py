@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 sys.path.insert(0, '.')
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 __doc__ = """
 ##### Jerricha's ParagonChat Costume App v.{} ######
 Jerrichas.py will automatically replace a costume in your DB with a
@@ -11,8 +11,9 @@ Instructions:
     a. Set COSTUME_FILE to your file that you created with "/costumesave
        myfile" in Icon.exe. Usually stored in "City of Heroes\Data" *NOTE*:
        Your costume file is NOT the same as the .costume files that are saved
-       from the Character Creator in Icon.exe. See
-       http://www.cohtitan.com/forum/index.php?topic=11076.0 for more info.
+       from the Character Creator in Icon.exe. Read
+       https://github.com/Jerricha/jerrichas/blob/master/docs/guide-to-jerrichas.md
+       for more info.
     b. If you have some weird installation of ParagonChat, you can set
        PARAGON_CHAT_DB to your ParagonChat.db location. (usually that's
        %APPDATA%\Paragon Chat\Database\ParagonChat.db") I've already set it
@@ -22,6 +23,8 @@ Instructions:
 3. CLOSE ParagonChat, then run Jerrichas. Follow the on-screen wizard.
 4. Please report your errors to me on the forums
    ( http://www.cohtitan.com/forum/index.php?topic=11197.msg189486 )!
+
+For more info, visit: https://github.com/Jerricha/jerrichas/
 
 LEGAL: GPLv3. No warrenties. Use it, share it, hack it, but DO NOT sell it!
 Love <3 Jerricha, Summer of 2015
@@ -49,7 +52,8 @@ def get_from_config(config_file):
     except:
         default_config = """[Jerrichas]
 COSTUME_FILE = _Replace_Me_
-PARAGON_CHAT_DB = %(APPDATA)s\Paragon Chat\Database\ParagonChat.db"""
+PARAGON_CHAT_DB = %(APPDATA)s\Paragon Chat\Database\ParagonChat.db\n
+### For more info and Readme, visit: https://github.com/Jerricha/jerrichas/ ###"""
         f = open("./jerrichas.ini", "w")
         f.write(default_config)
         f.close()
@@ -248,13 +252,13 @@ def event_loop(db, costumesave):
 1: Batch Mode
     Jerricha's will replace an entire costume with the full costumesave file.
 
-2: Cherry-Pick Mode
+2: Cherry-Pick Mode (Advanced)
     You have curated your costumesave file to only include the costume part(s)
     you want. Jerricha's will intelligently replace only those parts that need
     replacing for the costume of your choosing.
 
 3: Help
-    Shows you the help screen again and exit =)
+    Shows the help screen again and exits =)
 
 ( Ctrl+C to close me any time )
 
