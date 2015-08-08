@@ -17,6 +17,7 @@
 	- [I'm a poweruser/hacker/programmer/techie, and I can roll my own SQL. Why do I need Jerrichas?](#im-a-poweruserhackerprogrammertechie-and-i-can-roll-my-own-sql-why-do-i-need-jerrichas)
 	- [Things *Jerrichas* currently does *not* do, but will in the future:](#things-jerrichas-currently-does-not-do-but-will-in-the-future)
 	- [Upcoming features](#upcoming-features)
+
 <!-- /TOC -->
 
 ## What does *Jerricha's* do?
@@ -39,6 +40,7 @@ YES, just read this: [The Ultimate Guide "DBing your Costume" Using Jerrichas](d
 ### From .exe
 1. Download [Jerrichas.exe](https://github.com/Jerricha/jerrichas/raw/master/dist/Jerrichas.exe)
 2. Double click on Jerrichas.exe, follow the instructions =)
+3. If you're still unsure, read [The Ultimate Guide "DBing your Costume" Using Jerrichas](docs/guide-to-jerrichas.md)
 
 ### From Source (Advanced)
 
