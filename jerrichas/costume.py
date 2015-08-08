@@ -31,7 +31,7 @@ class CostumeCSV(object):
                 bodyset=row[43],
                 # name=row[],
                 color1=row[5],
-                # color2=row[],
+                color2=row[6],
                 # color3=row[],
                 # color4=row[],
             ),
@@ -39,6 +39,11 @@ class CostumeCSV(object):
         )
         return list(costume)
 
+    def get_proportions(self):
+        """
+        :returns: a mapping of /costumesave records to ParagonChatDB 'costume' columns.
+        """
+        return None
 
 class TailorSaved(object):
     """

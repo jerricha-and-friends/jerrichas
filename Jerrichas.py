@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import sys
+import traceback
 sys.path.insert(0, '.')
 VERSION = "0.3.0"
 __doc__ = """
@@ -109,8 +110,9 @@ def event_loop(db, costumesave):
 
 ( Ctrl+C to close me any time )
 
-[CostumeCSV file]: {costumesave}
-""".format(costumesave=costumesave.path))
+[COSTUME_FILE]: {costumesave}
+[PARAGON_CHAT_DB]: {db_path}
+""".format(costumesave=costumesave.path, db_path=db.db_path))
         try:
             mode = int(input("Select mode [1-3]: "))
             assert mode in [m['id'] for m in modes]
@@ -206,4 +208,10 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        ex_type, ex, tb = sys.exc_info()
+        traceback.print_tb(tb)
+        print("Error:", e)
+        print("Line:", sys.exc_traceback.tb_lineno)
