@@ -47,7 +47,7 @@ class ParagonChatDB(object):
 
     def query_replace_parts(self, costumesave, character_id, costume_id):
         """
-        Performs the costume replacement query against the ParagonChat db.
+        Constructs a selective costume replacement query.
 
         Intended use for "cherry-pick mode".
 
@@ -78,7 +78,7 @@ REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, co
 
     def query_replace_costume(self, costumesave, character_id, costume_id):
         """
-        Writes full-costume replacement query against the ParagonChat db.
+        Constructs a full-costume replacement query against the ParagonChat db.
 
         Intended use for "batch mode".
 
@@ -112,3 +112,18 @@ REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, co
             )
             sql_script.write(sql)
         return(sql_script)
+
+    def query_update_proportions(self, costumesave, character_id, costume_id):
+        """
+        Constructs an UPDATE query to change proportions, skin-color, and body.
+
+        Intended use for batch mode only.
+
+        :param costumesave: a jerrichas.CostumeCSV object
+        :param chracter_id: Character ID
+        :param costume_id: Costume ID
+
+        :returns: A StringIO of an SQLite Script.
+        """
+        proportions = costumesave.get_proportions()
+        sql_script = StringIO()

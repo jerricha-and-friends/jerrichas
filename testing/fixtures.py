@@ -10,3 +10,6 @@ def mock_db_live():
 
 def mock_costumesave_female():
     return os.path.join(PATH, "data/mock_costume_female")
+
+def mock_costumesave_cherrypicked():
+    return os.path.join(PATH, "data/mock_part_mom_trenchcoat")
