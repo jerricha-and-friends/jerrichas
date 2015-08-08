@@ -30,11 +30,12 @@ class ParagonChatDB(object):
         try:
             self.session.executescript(sql_script.getvalue())
             self.conn.commit()
-            return True, "Ok"
+            return True
         except Exception as e:
+            print(e)
             self.session.execute("ROLLBACK;")
             self.conn.commit()
-            return False, e
+            return False
 
     def get_account_names(self):
         accounts = self.session.execute("SELECT id, name FROM account")

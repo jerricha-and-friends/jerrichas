@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 sys.path.insert(0, '.')
-VERSION = "0.2.1"
+VERSION = "0.3.0"
 __doc__ = """
 ##### Jerricha's ParagonChat Costume App v.{} ######
 Jerrichas.py will automatically replace a costume in your DB with a
@@ -29,7 +29,6 @@ For more info, visit: https://github.com/Jerricha/jerrichas/
 LEGAL: GPLv3. No warrenties. Use it, share it, hack it, but DO NOT sell it!
 Love <3 Jerricha, Summer of 2015
 """.format(VERSION)
-from io import StringIO
 import os
 
 def quit_app(*msgs, exit_code=1):
@@ -78,9 +77,9 @@ def test_path(config):
 def backup_db(db_path):
     "Backs-up yo shit."
     from shutil import copy
-    backup_fp = os.path.join(os.path.split(self.db_path)[0], "ParagonChat.db.jerrichas")
+    backup_fp = os.path.join(os.path.split(db_path)[0], "ParagonChat.db.jerrichas")
     try:
-        copy(self.db_path, backup_fp)
+        copy(db_path, backup_fp)
     except IOError:
         quit_app("ERROR: Jerrichas terminating\nUnable to make a backup of your DB.")
     return True
@@ -173,35 +172,36 @@ def event_loop(db, costumesave):
             query = db.query_replace_costume(costumesave=costumesave, character_id=character_id, costume_id=costume_id)
             success = db._transact_query(query)
             try:
-                assert success[0] == True
+                assert success is True
             except:
-                quit_app(success[1], "Please report this to Jerricha!")
+                quit_app("Please report this to Jerricha!")
         elif mode == 2:
             print("\nPerforming cherry-pick costume part replace...")
             query = db.query_replace_parts(costumesave=costumesave, character_id=character_id, costume_id=costume_id)
             success = db._transact_query(query)
             try:
-                assert success[0] == True
+                assert success is True
             except:
-                quit_app(success[1], "Please report this to Jerricha!")
+                quit_app("Please report this to Jerricha!")
         quit_app("DONE! Thanks for using Jerricha's!", exit_code=0)
     else:
         quit_app("\n\nNothing was modified in your DB. Thanks for using Jerricha's!", exit_code=0)
-
 
 def main():
     print("### <3 Jerricha's ParagonChat DB Costume Utility v{} <3 ###".format(VERSION))
     config = get_from_config('./jerrichas.ini')
     test_path(config)
 
+    from jerrichas import CostumeCSV, ParagonChatDB
     try:
         costumesave = CostumeCSV(config['COSTUME_FILE'])
     except Exception as e:
-        quit_app("Some kind of error with your costume file.\n{}".format(e))
+        quit_app("Some kind of error with your costume file.", e)
+
     try:
         db = ParagonChatDB(config['PARAGON_CHAT_DB'])
-    except:
-        quit_app("ERROR: Jerrichas terminating\nSomething went wrong with the DB.")
+    except Exception as e:
+        quit_app("ERROR: Jerrichas terminating\nSomething went wrong with the DB.", e)
     event_loop(db=db, costumesave=costumesave)
 
 
