@@ -6,6 +6,9 @@ from unittest import TestCase
 PATH = os.path.split(os.path.realpath(__file__))[0]
 
 class BaseDBTestCase(TestCase):
+    """
+    Used to test CRUD transactions against the ParagonChat database.
+    """
     def setUp(self):
         # Copy .fixture db into .testing db
         db_path = os.path.join(PATH, "data/ParagonChat.db.testing")
@@ -16,8 +19,12 @@ class BaseDBTestCase(TestCase):
     def tearDown(self):
         self.db.session.close()
 
-class CostumesaveTestCase(TestCase):
-    pass
+class BaseCostumeTestCase(TestCase):
+    """
+    Data serialization from various Costume formats
+    """
+    def setUp(self):
+        pass
 
 class ConfigTestCase(TestCase):
     pass
