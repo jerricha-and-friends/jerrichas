@@ -1,12 +1,13 @@
-# Jerricha's, a ParagonChat Database App v0.2.0
+# Jerricha's, a ParagonChat Database App v0.2.1
 *Jerricha's*, a ParagonChat Database App, something to help us nerdy DB hackers automate our hacking.
 # Table of Contents
 <!-- TOC depth:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-- [Jerricha's, a ParagonChat Database App v0.2.0](#jerrichas-a-paragonchat-database-app-v020)
+- [Jerricha's, a ParagonChat Database App v0.2.1](#jerrichas-a-paragonchat-database-app-v021)
 - [Table of Contents](#table-of-contents)
 	- [What does *Jerricha's* do?](#what-does-jerrichas-do)
 	- [How does it work?](#how-does-it-work)
+	- [I'm a total newbie to DBing and I have no idea what you just said. Can you just take me to the thing?](#im-a-total-newbie-to-dbing-and-i-have-no-idea-what-you-just-said-can-you-just-take-me-to-the-thing)
 	- [How do I run Jerrichas?](#how-do-i-run-jerrichas)
 		- [From .exe](#from-exe)
 		- [From Source (Advanced)](#from-source-advanced)
