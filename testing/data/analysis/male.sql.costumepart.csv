@@ -1,0 +1,6 @@
+character,costume,part,name,geom,fx,tex1,tex2,displayname,region,bodyset,color1,color2,color3,color4
+5,0,0,,Tight,,leather_03,leather_03_Mask,None,"Lower Body",Tight,13290496,65023,0,0
+5,0,1,,Tight,,leather_03,leather_03_Mask,None,"Upper Body",Tight,13290496,65023,0,0
+5,0,2,,V_MALE_HEAD.GEO/GEO_Head_V_Asym_Masked,,!v_face_mask_05,!face_V_Asym_Eyes_01,None,Head,Standard,13290496,65023,0,0
+5,0,3,,Smooth,,leather_03,leather_03_Mask,None,"Upper Body",Tight,13290496,65023,0,0
+5,0,4,,Smooth,,leather_03,leather_03_Mask,None,"Lower Body",Tight,13290496,65023,0,0

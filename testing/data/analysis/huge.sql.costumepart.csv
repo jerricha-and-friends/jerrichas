@@ -1,0 +1,12 @@
+character,costume,part,name,geom,fx,tex1,tex2,displayname,region,bodyset,color1,color2,color3,color4
+5,1,0,,V_HUGE_PANTS.GEO/GEO_Hips_Pants_Biz_Slacks_01,,!Hips_V_Suit_Slacks_02,!Hips_V_Suit_Slacks_02_Mask,None,"Lower Body",Pants,255,13369600,0,0
+5,1,1,,Jackets_Sleeves,,skin_bare,,None,"Upper Body",Jackets,255,13369600,0,0
+5,1,2,,V_HUGE_HEAD.GEO/GEO_Head_V_Asym_Standard,,Skin_V_Head_06,,None,Head,Hats,255,13369600,0,0
+5,1,3,,Smooth,,skin_fingerless_01a,skin_fingerless_01b,None,"Upper Body",Jackets,255,13369600,0,0
+5,1,4,,V_HUGE_BOOT.GEO/GEO_Lleg*_Motorcycle_Boot_02,,!Boot_V_Motorcycle_01,!Boot_V_Motorcycle_01_Mask,None,"Lower Body",Pants,255,13369600,0,0
+5,1,5,,V_HUGE_BELT.GEO/GEO_Belt_Security_Belt_07,,!X_Officer_Belt,,None,"Upper Body",Jackets,255,13369600,0,0
+5,1,6,,V_HUGE_HAIR.GEO/GEO_Hair_Hat_ParagonPD,,!Emblem_V_Paragon_Police_Tie_01,!Emblem_V_Paragon_Police_Tie_01_Mask,None,Head,Hats,255,13369600,0,0
+5,1,8,,V_HUGE_EYES.GEO/GEO_Eyes_Mirror_Glasses,,!X_Mirror_Glasses,,None,Head,Hats,255,13369600,0,0
+5,1,13,,Mustache_02,,Beard_01a,Beard_01b,None,Head,Hats,255,13369600,0,0
+5,1,20,,V_HUGE_TOP.GEO/GEO_Top_Dress_Shirt_03,,!Top_V_Cop_Shirt_01,!Top_V_Cop_Shirt_01_Mask,None,"Upper Body",Jackets,255,13369600,0,0
+5,1,21,,V_HUGE_SLEEVES.GEO/GEO_Sleeves_Dress_Shirt_03,,!Top_V_Skin_Cop_Shirt_01,!Top_V_Skin_Cop_Shirt_01_Mask,None,"Upper Body",Jackets,255,13369600,0,0
