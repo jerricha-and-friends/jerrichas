@@ -2,7 +2,7 @@
 import sys
 import traceback
 sys.path.insert(0, '.')
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 __doc__ = """
 ##### Jerricha's ParagonChat Costume App v.{} ######
 Jerrichas.py will automatically replace a costume in your DB with a
