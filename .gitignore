@@ -5,7 +5,7 @@ build/
 *.pyo
 *.pyc
 jerrichas.ini
-*.db-shm
-*.db-wal
+*-shm
+*-wal
 Thumbs.db
 .~lock.*

@@ -88,14 +88,13 @@ REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, co
 
         :returns: A StringIO of an SQLite Script.
         """
-        costumeparts = costumesave.get_costumeparts()
         sql_script = StringIO()
 
         # DELETE old costume parts
         sql = """\
 DELETE FROM costumepart
     WHERE character='{character_id}'
-        AND costume='{costume_id}';"""\
+        AND costume='{costume_id}' ;"""\
         .format(
             character_id=character_id,
             costume_id=costume_id)
@@ -112,12 +111,11 @@ UPDATE costume
     --- Body Scales ---
         bodyscale='{bodyscale}',
         bonescale='{bonescale}',
-        headscale='{headscale}',
         shoulderscale='{shoulderscale}',
         chestscale='{chestscale}',
         waistscale='{waistscale}',
         hipscale='{hipscale}',
-        legscale='{legscale}',
+        legscale='{legscale}'
 
     --- Head and Face Scales ---
     --  headscales='{headscales}',
@@ -128,7 +126,7 @@ UPDATE costume
     --  jawscales='{jawscales}',
     --  nosescales='{nosescales}'
 
-    WHERE costume='{costume_id}' AND character='{character_id};'
+    WHERE costume='{costume_id}' AND character='{character_id}' ;\
 """.format(
             character_id=character_id,
             costume_id=costume_id,
@@ -137,10 +135,11 @@ UPDATE costume
         sql_script.write(sql)
 
         # REPLACE with new costume parts
+        costumeparts = costumesave.get_costumeparts()
         for i in costumeparts:
             sql = """\
 REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, color1, color2, character, costume, part)
-    VALUES ('{geom}', '{tex1}', '{tex2}', '{fx}', '{displayname}', '{region}', '{bodyset}', '{color1}', '{color2}', '{character_id}', '{costume_id}', '{part}');\
+    VALUES ('{geom}', '{tex1}', '{tex2}', '{fx}', '{displayname}', '{region}', '{bodyset}', '{color1}', '{color2}', '{character_id}', '{costume_id}', '{part}') ;\
                 """
             sql = sql.format(
                 character_id=character_id,
@@ -148,4 +147,5 @@ REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, co
                 **i
             )
             sql_script.write(sql)
+
         return(sql_script)
