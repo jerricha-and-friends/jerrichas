@@ -1,9 +1,9 @@
-# Jerricha's, a ParagonChat Database App v0.3.0
+# Jerricha's, a ParagonChat Database App v0.3.1
 *Jerricha's*, a ParagonChat Database App, something to help us nerdy DB hackers automate our hacking.
 # Table of Contents
 <!-- TOC depth:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-- [Jerricha's, a ParagonChat Database App v0.3.0](#jerrichas-a-paragonchat-database-app-v021)
+- [Jerricha's, a ParagonChat Database App v0.3.1](#jerrichas-a-paragonchat-database-app-v031)
 - [Table of Contents](#table-of-contents)
 	- [What does *Jerricha's* do?](#what-does-jerrichas-do)
 	- [How does it work?](#how-does-it-work)
@@ -11,13 +11,16 @@
 	- [How do I run Jerrichas?](#how-do-i-run-jerrichas)
 		- [From .exe](#from-exe)
 		- [From Source (Advanced)](#from-source-advanced)
+	- [New Features as of v.0.3.1](#new-features-as-of-v031)
+		- [Bug Fixes](#bug-fixes)
+		- [Body Scales & Gender](#body-scales-gender)
+		- [API](#api)
 	- [New Features as of v.0.2.0](#new-features-as-of-v020)
 		- [Config file](#config-file)
 		- [Cherry-Pick mode](#cherry-pick-mode)
 	- [I'm a poweruser/hacker/programmer/techie, and I can roll my own SQL. Why do I need Jerrichas?](#im-a-poweruserhackerprogrammertechie-and-i-can-roll-my-own-sql-why-do-i-need-jerrichas)
 	- [Things *Jerrichas* currently does *not* do, but will in the future:](#things-jerrichas-currently-does-not-do-but-will-in-the-future)
 	- [Upcoming features](#upcoming-features)
-
 <!-- /TOC -->
 
 ## What does *Jerricha's* do?
@@ -62,13 +65,27 @@ workon jerrichas
 ```python Jerrichas.py```
 5. Follow the on-screen instructions
 
+## New Features as of v.0.3.1
+### Bug Fixes
+* Secondary color will now update
+
+### Body Scales & Gender
+* Body scales and gender will update. You can replace a male.
+* **NOTE**: Face/head scales are still being worked on
+
+### API
+* Jerrichas has been modularized and refactored substantially
+* `jerrichas.ParagonChatDB` and `jerrichas.CostumeCSV` expose functionality into the database and costumesave CSV files.
+* [We're working on converting Sentinel+ XML into Jerrichas](https://github.com/Jerricha/jerrichas/issues/10)
+* [We're also working on converting .costume files into Jerrichas](https://github.com/Jerricha/jerrichas/issues/10)
+
 ## New Features as of v.0.2.0
 ### Config file
 * Jerrichas will generate a config file, so you can specify your database and costumesave paths. If you ever screw it up, don't worry, Jerrichas will re-generate the config.
 * BTW, don't surround your path in quotes, it'll confuse the parser (and let you know)
 
 ### Cherry-Pick mode
-1. Curate your costumefile to include only the parts you want. For example, in [mock_part_mom_trenchcoat](testing/data/mock_part_mom_trenchcoat), this will give you just Mother Mayhem's trenchcoat.
+1. Curate your costumefile to include only the parts you want. For example, in [trenchcoat_cherrypicked](testing/data/costumes/trenchcoat_cherrypicked.save.csv), this will give you just Mother Mayhem's trenchcoat.
 2. Select Cherry-Pick mode from the menu =)
 * Seriously, *don't* select Batch with a cherrypicked file, or you will seriously screw up your costume.
 

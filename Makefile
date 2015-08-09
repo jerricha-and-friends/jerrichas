@@ -1,5 +1,5 @@
 # Jerricha's!
-# Reminder: Make me in Cygwin until Msys environment OK
+# Compiled using Cygwin + UPX + pyinstaller
 
 PROJECT_NAME=Jerrichas
 

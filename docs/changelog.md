@@ -1,4 +1,13 @@
 # Jerricha's Changelog
+## 0.3.1 (08-09-2015)
+### Features
+* Body scales now update in Batch mode (thanks to @ROBOKiTTY)
+* `Jerrichas.exe` now Compiled with UPX, resulting in smaller file =)
+### API
+* Super basic test harness set up
+* Placeholder classes in jerrichas.costume for TailorSave and SentinelPlusXML - future directions
+
+
 ## 0.3.0 (08-08-2015)
 ### Bug-fixes
 * Fixed bug (#6) whereby secondary colors weren't being updated in the DB.
