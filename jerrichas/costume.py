@@ -18,13 +18,13 @@ class BaseCostumeSave(object):
         """
         :returns: a mapping of costumepart elements to ParagonChatDB 'costumepart' columns
         """
-        return list()
+        self.fp.seek(0)
 
     def get_proportions(self):
         """
         :returns: a mapping of costume proportions to ParagonChatDB 'costume' columns.
         """
-        return list()
+        self.fp.seek(0)
 
 
 class CostumeCSV(BaseCostumeSave):
@@ -39,6 +39,7 @@ class CostumeCSV(BaseCostumeSave):
         """
         :returns: a mapping of /costumesave elements to ParagonChatDB 'costumepart' columns
         """
+        super()
         costume_csv = csv.reader(self.fp)
         costume = map(
             lambda row: dict(
@@ -58,12 +59,14 @@ class CostumeCSV(BaseCostumeSave):
             ),
             costume_csv
         )
+        self.fp.seek(0)
         return list(costume)
 
     def get_proportions(self):
         """
         :returns: a mapping of /costumesave records to ParagonChatDB 'costume' columns.
         """
+        super()
         row = csv.reader(self.fp).__next__()
         proportions = dict(
             bodytype=row[7],

@@ -1,3 +1,6 @@
+# Jerrichas by Jerricha@chat.cohtitan.com, Summer 2015!
+# GPLv3
+
 from jerrichas.database import ParagonChatDB
 import os
 import shutil
