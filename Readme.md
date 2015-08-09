@@ -21,6 +21,7 @@
 	- [I'm a poweruser/hacker/programmer/techie, and I can roll my own SQL. Why do I need Jerrichas?](#im-a-poweruserhackerprogrammertechie-and-i-can-roll-my-own-sql-why-do-i-need-jerrichas)
 	- [Things *Jerrichas* currently does *not* do, but will in the future:](#things-jerrichas-currently-does-not-do-but-will-in-the-future)
 	- [Upcoming features](#upcoming-features)
+
 <!-- /TOC -->
 
 ## What does *Jerricha's* do?
@@ -101,7 +102,7 @@ You absolutely can do this manually, as the community has been so far. However, 
 ## Upcoming features
 * ~~Compilation into a .exe~~ (v0.2.0)
 * ~~Cherry-pick mode~~ (v0.2.0)
+* ~~Automated testing~~ (on-going) (v0.3.1)
 * Full API support for other developers/coders/hackers
 * Mac support
 * JerrichaQT GUI
-* Automated testing
