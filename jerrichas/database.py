@@ -90,6 +90,8 @@ REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, co
         """
         costumeparts = costumesave.get_costumeparts()
         sql_script = StringIO()
+
+        # DELETE old costume parts
         sql = """\
 DELETE FROM costumepart
     WHERE character='{character_id}'
@@ -99,9 +101,44 @@ DELETE FROM costumepart
             costume_id=costume_id)
         sql_script.write(sql)
 
+        # UPDATE proportions from costume table
+        proportions = costumesave.get_proportions()
+        sql = """\
+UPDATE costume
+    SET
+        bodytype='{bodytype}',
+    --  skincolor='{skincolor}',
+
+    --- Body Scales ---
+        bodyscale='{bodyscale}',
+        bonescale='{bonescale}',
+        headscale='{headscale}',
+        shoulderscale='{shoulderscale}',
+        chestscale='{chestscale}',
+        waistscale='{waistscale}',
+        hipscale='{hipscale}',
+        legscale='{legscale}',
+
+    --- Head and Face Scales ---
+    --  headscales='{headscales}',
+    --  browscales='{browscales}',
+    --  cheekscales='{cheekscales}',
+    --  chinscales='{chinscales}',
+    --  craniumscales='{craniumscales}',
+    --  jawscales='{jawscales}',
+    --  nosescales='{nosescales}'
+
+    WHERE costume='{costume_id}' AND character='{character_id};'
+""".format(
+            character_id=character_id,
+            costume_id=costume_id,
+            **proportions
+        )
+        sql_script.write(sql)
+
+        # REPLACE with new costume parts
         for i in costumeparts:
-            sql =\
-                """\
+            sql = """\
 REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, color1, color2, character, costume, part)
     VALUES ('{geom}', '{tex1}', '{tex2}', '{fx}', '{displayname}', '{region}', '{bodyset}', '{color1}', '{color2}', '{character_id}', '{costume_id}', '{part}');\
                 """
@@ -112,18 +149,3 @@ REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, co
             )
             sql_script.write(sql)
         return(sql_script)
-
-    def query_update_proportions(self, costumesave, character_id, costume_id):
-        """
-        Constructs an UPDATE query to change proportions, skin-color, and body.
-
-        Intended use for batch mode only.
-
-        :param costumesave: a jerrichas.CostumeCSV object
-        :param chracter_id: Character ID
-        :param costume_id: Costume ID
-
-        :returns: A StringIO of an SQLite Script.
-        """
-        proportions = costumesave.get_proportions()
-        sql_script = StringIO()

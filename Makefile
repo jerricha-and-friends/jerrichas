@@ -12,6 +12,9 @@ run:
 dbshell:
 	sqlite3 $$APPDATA/Paragon\ Chat/Database/ParagonChat.db
 
+dbshell-test:
+	sqlite3 testing/data/ParagonChat.db
+
 test-all:
 	nosetests -w testing -c etc/test-all.config
 
@@ -27,4 +30,4 @@ compile-win:
 	find . | grep -E "(build|dist)" | xargs rm -rf
 	pyinstaller --clean --onefile --icon=docs/jerrichas.ico Jerrichas.py
 
-.PHONY: install clean compile-win test-all test-one run dbshell
+.PHONY: install clean compile-win test-all test-one run dbshell dbshell-test

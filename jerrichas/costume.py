@@ -67,15 +67,29 @@ class CostumeCSV(BaseCostumeSave):
         :returns: a mapping of /costumesave records to ParagonChatDB 'costume' columns.
         """
         super()
+        int_convert = lambda x, y, z: int(float(z) * 100) << 16 | int(float(y) * 100) << 8 | int(float(x) * 100)
+
         row = csv.reader(self.fp).__next__()
         proportions = dict(
+            ## Atomic ##
             bodytype=row[7],
+            skincolor=row[8],  # Conversion may be required
+            bodyscale=row[9],
             bonescale=row[10],
             shoulderscale=row[12],
             chestscale=row[13],
             waistscale=row[14],
             hipscale=row[15],
             legscale=row[16],
+
+            ## Head/Face Scales (Composites) ##
+            headscales=int_convert(*row[18:20+1]),
+            browscales=int_convert(*row[21:23+1]),
+            cheekscales=int_convert(*row[24:26+1]),
+            chinscales=int_convert(*row[27:29+1]),
+            craniumscales=int_convert(*row[30:32+1]),
+            jawscales=int_convert(*row[33:35+1]),
+            nosescales=int_convert(*row[36:38+1]),
         )
         return proportions
 
