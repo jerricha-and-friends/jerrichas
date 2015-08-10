@@ -10,21 +10,20 @@ class TailorCostume(BaseCostumeSave):
     """
     Represents a .costume file saved from in-game tailor
     """
-    def __init__(self, path):
+    def __init__(self, fp):
         """
-        :param path: /.costume file path
+        :param fp: /.costume file
         :type path: str
         """
         super()
-        self.costume_map = self.parse(path)
+        self.costume_map = self.parse(fp)
 
-    def parse(self, path):
+    def parse(self, file):
         """
-        :returns: a list of maps of .costume elements
+        :returns: a maps of .costume elements
         """
-        file = open(path, mode = 'r')
         costume_map = {}
-        fileDepth = 0
+        file_depth = 0
         part_index = 0
 
         for raw_line in file.readlines():
@@ -34,14 +33,14 @@ class TailorCostume(BaseCostumeSave):
             key_name = segments[0]
             if line == '' or line == '\n' or line.startswith("CostumePart"):
                 pass
-            if fileDepth == 0:
+            if file_depth == 0:
                 if line == '{':
-                    fileDepth = 1
-            elif fileDepth == 1:
+                    file_depth = 1
+            elif file_depth == 1:
                 if line == '{':
-                    fileDepth = 2
+                    file_depth = 2
                 elif line == '}':
-                    fileDepth = 0
+                    file_depth = 0
                 else:
                     if key_name == 'costumefileprefix' or key_name == 'numparts': # unused values
                         pass
@@ -60,8 +59,8 @@ class TailorCostume(BaseCostumeSave):
                         if segments[1:][0] == 'none':
                             costume_map[part_index][key_name] = ''
                         else:
-                            costume_map[part_index][key_name] = segments[1:]
-            elif fileDepth == 2:
+                            costume_map[part_index][key_name] = segments[1:][0]
+            elif file_depth == 2:
                 if line == '}':
                     if costume_map.get('fx') is None:
                         costume_map['fx'] = ""
@@ -71,7 +70,7 @@ class TailorCostume(BaseCostumeSave):
                         costume_map['region'] = ''
                     elif costume_map.get('bodyset') is None:
                         costume_map['bodyset'] = ''
-                    fileDepth = 1
+                    file_depth = 1
                     part_index += 1
                 else:
                     if part_index not in costume_map:
@@ -94,7 +93,10 @@ class TailorCostume(BaseCostumeSave):
                         if segments[1:][0] == 'none':
                             costume_map[part_index][key_name] = ''
                         else:
-                            costume_map[part_index][key_name] = segments[1:]
+                            if segments[1:].__len__() > 1:
+                                costume_map[part_index][key_name] = ' '.join(segments[1:])
+                            else:
+                                costume_map[part_index][key_name] = segments[1:][0]
 
         # TODO: set other default values here?
         return costume_map
@@ -111,4 +113,22 @@ class TailorCostume(BaseCostumeSave):
         :returns: a mapping of /.costume records to ParagonChatDB 'costume' columns.
         """
         super()
-        return None
+        result = {
+            'bodytype' : self.costume_map['bodytype'],
+            'skincolor' : self.costume_map['skincolor'],
+            'bodyscale' : self.costume_map['bodyscale'],
+            'bonescale' : self.costume_map['bonescale'],
+            'shoulderscale' : self.costume_map['shoulderscale'],
+            'chestscale' : self.costume_map['chestscale'],
+            'waistscale' : self.costume_map['waistscale'],
+            'hipscale' : self.costume_map['hipscale'],
+            'legscale' : self.costume_map['legscale'],
+            'headscales' : self.costume_map['headscales'],
+            'browscales' : self.costume_map['browscales'],
+            'cheekscales' : self.costume_map['cheekscales'],
+            'chinscales' : self.costume_map['chinscales'],
+            'craniumscales' : self.costume_map['craniumscales'],
+            'jawscales' : self.costume_map['jawscales'],
+            'nosescales' : self.costume_map['nosescales']
+        }
+        return result
