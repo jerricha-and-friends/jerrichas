@@ -3,7 +3,7 @@
 # GPLv3
 
 from costume import BaseCostumeSave
-from utils import Utils
+import utils
 
 
 class TailorCostume(BaseCostumeSave):
@@ -51,11 +51,11 @@ class TailorCostume(BaseCostumeSave):
                     # convert arrays of decimals into single integer per ParagonChat db schema
                     if key_name.endswith('scales'):
                         scales = [float(each) for each in segments[1:]]
-                        costume_map[key_name] = Utils.floats_to_int(scales)
+                        costume_map[key_name] = utils.floats_to_int(scales)
                     # convert skincolor RGB values into single integer per ParagonChat db schema
                     elif key_name == 'skincolor':
                         colour_vals = [int(each) for each in segments[1:]]
-                        costume_map[key_name] = Utils.encode_colour(colour_vals)
+                        costume_map[key_name] = utils.encode_colour(colour_vals)
                     else:
                         costume_map[key_name] = segments[1:]
             elif level == 2:
@@ -78,7 +78,7 @@ class TailorCostume(BaseCostumeSave):
 
                     if key_name.startswith('color'):
                         colour_vals = [int(each) for each in segments[1:]]
-                        costume_map[key_name] = Utils.encode_colour(colour_vals)
+                        costume_map[key_name] = utils.encode_colour(colour_vals)
                     else:
                         costume_map[part_index][key_name] = segments[1:]
 
