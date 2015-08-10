@@ -24,7 +24,7 @@ class TailorCostume(BaseCostumeSave):
         """
         file = open(path, mode = 'r')
         costume_map = {}
-        level = 0
+        fileDepth = 0
         part_index = 0
 
         for raw_line in file.readlines():
@@ -34,14 +34,14 @@ class TailorCostume(BaseCostumeSave):
             key_name = segments[0]
             if line == '' or line == '\n' or line.startswith("CostumePart"):
                 pass
-            if level == 0:
+            if fileDepth == 0:
                 if line == '{':
-                    level = 1
-            elif level == 1:
+                    fileDepth = 1
+            elif fileDepth == 1:
                 if line == '{':
-                    level = 2
+                    fileDepth = 2
                 elif line == '}':
-                    level = 0
+                    fileDepth = 0
                 else:
                     if key_name == 'costumefileprefix' or key_name == 'numparts': # unused values
                         pass
@@ -57,10 +57,21 @@ class TailorCostume(BaseCostumeSave):
                         colour_vals = [int(each) for each in segments[1:]]
                         costume_map[key_name] = utils.encode_colour(colour_vals)
                     else:
-                        costume_map[key_name] = segments[1:]
-            elif level == 2:
+                        if segments[1:][0] == 'none':
+                            costume_map[part_index][key_name] = ''
+                        else:
+                            costume_map[part_index][key_name] = segments[1:]
+            elif fileDepth == 2:
                 if line == '}':
-                    level = 1
+                    if costume_map.get('fx') is None:
+                        costume_map['fx'] = ""
+                    elif costume_map.get('displayname') is None:
+                        costume_map['displayname'] = ''
+                    elif costume_map.get('region') is None:
+                        costume_map['region'] = ''
+                    elif costume_map.get('bodyset') is None:
+                        costume_map['bodyset'] = ''
+                    fileDepth = 1
                     part_index += 1
                 else:
                     if part_index not in costume_map:
@@ -80,8 +91,12 @@ class TailorCostume(BaseCostumeSave):
                         colour_vals = [int(each) for each in segments[1:]]
                         costume_map[key_name] = utils.encode_colour(colour_vals)
                     else:
-                        costume_map[part_index][key_name] = segments[1:]
+                        if segments[1:][0] == 'none':
+                            costume_map[part_index][key_name] = ''
+                        else:
+                            costume_map[part_index][key_name] = segments[1:]
 
+        # TODO: set other default values here?
         return costume_map
 
     def get_costumeparts(self):
