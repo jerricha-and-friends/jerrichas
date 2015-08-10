@@ -1,8 +1,12 @@
 # Jerrichas by Jerricha@chat.cohtitan.com, Summer 2015!
+# module by ROBOKiTTY
 # GPLv3
 
+from costume import BaseCostumeSave
+from utils import Utils
 
-class TailorCostume(object):
+
+class TailorCostume(BaseCostumeSave):
     """
     Represents a .costume file saved from in-game tailor
     """
@@ -11,44 +15,14 @@ class TailorCostume(object):
         :param path: /.costume file path
         :type path: str
         """
-        self.path = path
+        super()
+        self.costume_map = self.parse(path)
 
-    def clamp_scales(value):
-        """
-        :param value: value to be clamped
-        :return: clamps value between -1.0 and 1.0
-        """
-        return max(min(value, 1.0), -1.0)
-
-    def is_clamped(value):
-        """
-        :param value: value to be checked for clampedness
-        :return: true if value between -1.0 and 1.0
-        """
-        return -1 < value < 1
-
-    def signum(value):
-        """
-        :param value: value to be evaluated for sign
-        :return: signum; 1 if value positive, -1 if value negative, 0 if value is 0
-        """
-        return value and (1, -1)[value < 0]
-
-    def encode_colour(list):
-        """
-        :param list: list of three decimal integers clamped between 0~255
-        :return: a colour string in format "rrggbbaa", where aa is 'ff' and all alphabetical numbers are lower case
-        """
-        assert(list.__len__() == 3)
-        for colour in list:
-            assert(0 <= colour <= 255)
-        return format(colour[0], 'x') + format(colour[1], 'x') + format(colour[2], 'x') + 'ff'
-
-    def parse(self):
+    def parse(self, path):
         """
         :returns: a list of maps of .costume elements
         """
-        file = open(self.path, mode = 'r')
+        file = open(path, mode = 'r')
         costume_map = {}
         level = 0
         part_index = 0
@@ -77,22 +51,11 @@ class TailorCostume(object):
                     # convert arrays of decimals into single integer per ParagonChat db schema
                     if key_name.endswith('scales'):
                         scales = [float(each) for each in segments[1:]]
-                        assert(scales.__len__() == 3)
-                        scales_as_int = 0;
-                        scales_as_int += int(abs(scales[0] * 100)) | 0x80\
-                                  if self.signum(scales[0]) == -1\
-                                  else int(abs(scales[0] * 100)) | 0
-                        scales_as_int += (int(abs(scales[1] * 100)) | 0x80) << 8\
-                                  if self.signum(scales[1]) == -1\
-                                  else (int(abs(scales[1] * 100)) | 0) << 8
-                        scales_as_int += (int(abs(scales[2] * 100)) | 0x80) << 16\
-                                  if self.signum(scales[2]) == -1\
-                                  else (int(abs(scales[2] * 100)) | 0) << 16
-                        costume_map[key_name] = scales_as_int
+                        costume_map[key_name] = Utils.floats_to_int(scales)
                     # convert skincolor RGB values into single integer per ParagonChat db schema
                     elif key_name == 'skincolor':
                         colour_vals = [int(each) for each in segments[1:]]
-                        costume_map[key_name] = self.encode_colour(colour_vals)
+                        costume_map[key_name] = Utils.encode_colour(colour_vals)
                     else:
                         costume_map[key_name] = segments[1:]
             elif level == 2:
@@ -115,10 +78,10 @@ class TailorCostume(object):
 
                     if key_name.startswith('color'):
                         colour_vals = [int(each) for each in segments[1:]]
-                        costume_map[key_name] = self.encode_colour(colour_vals)
+                        costume_map[key_name] = Utils.encode_colour(colour_vals)
                     else:
                         costume_map[part_index][key_name] = segments[1:]
-        
+
         return costume_map
 
 
@@ -126,10 +89,12 @@ class TailorCostume(object):
         """
         :returns: a mapping of /.costume elements to ParagonChatDB 'costumepart' columns
         """
+        super()
         return None
 
     def get_proportions(self):
         """
         :returns: a mapping of /.costume records to ParagonChatDB 'costume' columns.
         """
+        super()
         return None
