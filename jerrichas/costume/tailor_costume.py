@@ -70,6 +70,7 @@ class TailorCostume(BaseCostumeSave):
                         costume_map['region'] = ''
                     elif costume_map.get('bodyset') is None:
                         costume_map['bodyset'] = ''
+                    costume_map['part'] = part_index
                     file_depth = 1
                     part_index += 1
                 else:
@@ -106,9 +107,13 @@ class TailorCostume(BaseCostumeSave):
         :returns: a mapping of /.costume elements to ParagonChatDB 'costumepart' columns
         """
         super()
-        return None
+        result = []
+        for key in self.costume_map:
+            if key.isdigit():
+                result.append(self.costume_map[key])
+        return sorted(result, key = lambda k: k['part'])
 
-    def get_proportions(self):
+    def get_scales(self):
         """
         :returns: a mapping of /.costume records to ParagonChatDB 'costume' columns.
         """
