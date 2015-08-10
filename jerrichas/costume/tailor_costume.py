@@ -2,7 +2,7 @@
 # module by ROBOKiTTY
 # GPLv3
 
-from . import BaseCostumeSave
+from .base import BaseCostumeSave
 from . import utils
 
 

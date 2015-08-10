@@ -1,7 +1,7 @@
 # Jerrichas by Jerricha@chat.cohtitan.com, Summer 2015!
 # GPLv3
 
-from . import BaseCostumeSave
+from .base import BaseCostumeSave
 
 class SentinelPlusXML(BaseCostumeSave):
     """

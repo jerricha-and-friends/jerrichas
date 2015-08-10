@@ -1,7 +1,7 @@
 # Jerrichas by Jerricha@chat.cohtitan.com, Summer 2015!
 # GPLv3
 
-from . import BaseCostumeSave
+from .base import BaseCostumeSave
 import csv
 
 class CostumeCSV(BaseCostumeSave):
@@ -17,6 +17,7 @@ class CostumeCSV(BaseCostumeSave):
         :returns: a mapping of /costumesave elements to ParagonChatDB 'costumepart' columns
         """
         super()
+        self.fp.seek(0)
         costume_csv = csv.reader(self.fp)
         costume = map(
             lambda row: dict(
@@ -39,11 +40,12 @@ class CostumeCSV(BaseCostumeSave):
         self.fp.seek(0)
         return list(costume)
 
-    def get_proportions(self):
+    def get_scales(self):
         """
         :returns: a mapping of /costumesave records to ParagonChatDB 'costume' columns.
         """
         super()
+        self.fp.seek(0)
         int_convert = lambda x, y, z: int(float(z) * 100) << 16 | int(float(y) * 100) << 8 | int(float(x) * 100)
 
         row = csv.reader(self.fp).__next__()

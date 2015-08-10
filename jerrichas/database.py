@@ -101,7 +101,7 @@ DELETE FROM costumepart
         sql_script.write(sql)
 
         # UPDATE proportions from costume table
-        proportions = costumesave.get_proportions()
+        proportions = costumesave.get_scales()
         sql = """\
 UPDATE costume
     SET
