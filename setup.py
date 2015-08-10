@@ -1,7 +1,7 @@
 from setuptools import setup
-improt os, shutil
+import os, shutil
 
-VERSION = "0.2.0"
+VERSION = "0.3.1"
 
 setup(version = VERSION,
     description = "Jerrichas, the ParagonChat DB tool and API",
@@ -9,7 +9,7 @@ setup(version = VERSION,
         "jerrichas",
     ],
     scripts = [
-        "jerrichas.py",
+        "Jerrichas.py",
     ],
     author="Jerricha",
     install_requires = [],

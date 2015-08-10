@@ -47,7 +47,7 @@ class ParagonChatDB(object):
 
     def query_replace_parts(self, costumesave, character_id, costume_id):
         """
-        Performs the costume replacement query against the ParagonChat db.
+        Constructs a selective costume replacement query.
 
         Intended use for "cherry-pick mode".
 
@@ -78,7 +78,7 @@ REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, co
 
     def query_replace_costume(self, costumesave, character_id, costume_id):
         """
-        Writes full-costume replacement query against the ParagonChat db.
+        Constructs a full-costume replacement query against the ParagonChat db.
 
         Intended use for "batch mode".
 
@@ -88,22 +88,58 @@ REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, co
 
         :returns: A StringIO of an SQLite Script.
         """
-        costumeparts = costumesave.get_costumeparts()
         sql_script = StringIO()
+
+        # DELETE old costume parts
         sql = """\
 DELETE FROM costumepart
     WHERE character='{character_id}'
-        AND costume='{costume_id}';"""\
+        AND costume='{costume_id}' ;"""\
         .format(
             character_id=character_id,
             costume_id=costume_id)
         sql_script.write(sql)
 
+        # UPDATE proportions from costume table
+        proportions = costumesave.get_proportions()
+        sql = """\
+UPDATE costume
+    SET
+        bodytype='{bodytype}',
+    --  skincolor='{skincolor}',
+
+    --- Body Scales ---
+        bodyscale='{bodyscale}',
+        bonescale='{bonescale}',
+        shoulderscale='{shoulderscale}',
+        chestscale='{chestscale}',
+        waistscale='{waistscale}',
+        hipscale='{hipscale}',
+        legscale='{legscale}'
+
+    --- Head and Face Scales ---
+    --  headscales='{headscales}',
+    --  browscales='{browscales}',
+    --  cheekscales='{cheekscales}',
+    --  chinscales='{chinscales}',
+    --  craniumscales='{craniumscales}',
+    --  jawscales='{jawscales}',
+    --  nosescales='{nosescales}'
+
+    WHERE costume='{costume_id}' AND character='{character_id}' ;\
+""".format(
+            character_id=character_id,
+            costume_id=costume_id,
+            **proportions
+        )
+        sql_script.write(sql)
+
+        # REPLACE with new costume parts
+        costumeparts = costumesave.get_costumeparts()
         for i in costumeparts:
-            sql =\
-                """\
+            sql = """\
 REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, color1, color2, character, costume, part)
-    VALUES ('{geom}', '{tex1}', '{tex2}', '{fx}', '{displayname}', '{region}', '{bodyset}', '{color1}', '{color2}', '{character_id}', '{costume_id}', '{part}');\
+    VALUES ('{geom}', '{tex1}', '{tex2}', '{fx}', '{displayname}', '{region}', '{bodyset}', '{color1}', '{color2}', '{character_id}', '{costume_id}', '{part}') ;\
                 """
             sql = sql.format(
                 character_id=character_id,
@@ -111,4 +147,5 @@ REPLACE INTO costumepart (geom, tex1, tex2, fx, displayname, region, bodyset, co
                 **i
             )
             sql_script.write(sql)
+
         return(sql_script)

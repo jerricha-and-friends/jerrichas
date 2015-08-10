@@ -1,0 +1,14 @@
+character,costume,bodytype,skincolor,bodyscale,bonescale,headscale,shoulderscale,chestscale,waistscale,hipscale,legscale,headscales,browscales,cheekscales,chinscales,craniumscales,jawscales,nosescales
+1,8,1,-5587978,-1.937,-1.0,0.0,-0.57,1.0,-0.311,-0.701,0.02,13078784,11386685,1160203,12248229,10223945,15000804,11109604
+sqlite> SELECT * from costumepart WHERE character=1 AND costume=8;
+character,costume,part,name,geom,fx,tex1,tex2,displayname,region,bodyset,color1,color2,color3,color4
+1,8,0,,shorts,,skin_tights,Bikini,None,"Lower Body",Tights/skin,-16777216,0,0,0
+1,8,1,,Tight,,!X_Chest_Skin_Tank_FEMALE_Cyberpunk_02,,None,"Upper Body",Tights/skin,-16777216,0,0,0
+1,8,2,,V_fem_Head.GEO/GEO_Head_V_Asym_Mask,,V_Mask_Skull_02,!Face_V_Mask_Ghost_01,None,Head,Standard,-1,0,0,0
+1,8,3,,V_FEM_GLOVE.GEO/GEO_Larm*_Witch_02,,!X_Glove_Witch_02,!glove_V_Witch_02_Mask,None,"Upper Body",Tights/skin,-16777216,0,0,0
+1,8,4,,N_Fem_Barbarian_Boot.geo/GEO_LlegR_Barbarian_Boot_02,,!X_Boot_Fem_Barbarian_02,!Barbarian_Fem_Boot_01_Mask,None,"Lower Body",Tights/skin,-16777216,0,0,0
+1,8,5,,V_FEM_BELT.GEO/GEO_Belt_Security_Belt_07,,!X_Officer_Belt,,None,"Upper Body",Tights/skin,-3684409,0,0,0
+1,8,6,,Short_01,,Long_01a,Long_01b,None,Head,Standard,-16733697,5045759,0,0
+1,8,10,,Collar_Spike,,Collar_Spiked_01a,Collar_Spiked_01b,None,"Upper Body",Tights/skin,-1,0,0,0
+1,8,15,,Half,,Cape_Top_01,,None,Capes,HalfMantle,-16777216,0,0,0
+1,8,17,,,capes/CapeShortFem.fx,Cape_01,Cape_V_Tribal_01,None,Capes,HalfMantle,-16777216,0,0,0

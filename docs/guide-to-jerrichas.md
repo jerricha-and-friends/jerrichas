@@ -98,7 +98,7 @@ PARAGON_CHAT_DB = %(APPDATA)s\Paragon Chat\Database\ParagonChat.db
 
 # A few caveats
 Currently, Jerrichas cannot:
-  * detect what gender your costume is.
-  * change your costume proportions.
+  * ~~detect what gender your costume is.~~ As of 0.3.1, Jerrichas update your gender
+  * ~~change your costume scales.~~ As of 0.3.1 Jerrichas updates your body scales (head/face scales pending)
 
 Thus, make sure your original ParagonChat character costume has the right gender and proportions before you replace it with a `costumesave` file.

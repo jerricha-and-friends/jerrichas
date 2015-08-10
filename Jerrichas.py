@@ -2,7 +2,7 @@
 import sys
 import traceback
 sys.path.insert(0, '.')
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 __doc__ = """
 ##### Jerricha's ParagonChat Costume App v.{} ######
 Jerrichas.py will automatically replace a costume in your DB with a
@@ -112,7 +112,7 @@ def event_loop(db, costumesave):
 
 [COSTUME_FILE]: {costumesave}
 [PARAGON_CHAT_DB]: {db_path}
-""".format(costumesave=costumesave.path, db_path=db.db_path))
+""".format(costumesave=costumesave.fp.name, db_path=db.db_path))
         try:
             mode = int(input("Select mode [1-3]: "))
             assert mode in [m['id'] for m in modes]
@@ -164,7 +164,7 @@ def event_loop(db, costumesave):
 
     # Confirm Selection
     confirm = str(input("\n({mode})\nWe're about to alter {name}'s costume #{costume_id} with data from the costumesave file '{COSTUME_FILE}'\nThis change is permanent, and *may* result in a corrupt DB file -- please make sure to backup your DB!\n(Jerricha's will also *try* to backup your DB at ParagonChat.db.jerrichas)\nDo you wish to proceed? (you must type exactly 'y' or 'yes') [ Yes / No ]: "
-        .format(mode=modep(mode), COSTUME_FILE=costumesave.path, costume_id=costume_id, name=character['name']))).lower()
+        .format(mode=modep(mode), COSTUME_FILE=costumesave.fp.name, costume_id=costume_id, name=character['name']))).lower()
     if confirm == 'y' or confirm == 'yes':
         print("Backing up your DB to 'ParagonChat.db.jerrichas'...")
         backup_db(db.db_path)
@@ -196,7 +196,7 @@ def main():
 
     from jerrichas import CostumeCSV, ParagonChatDB
     try:
-        costumesave = CostumeCSV(config['COSTUME_FILE'])
+        costumesave = CostumeCSV(open(config['COSTUME_FILE'], 'r'))
     except Exception as e:
         quit_app("Some kind of error with your costume file.", e)
 
@@ -208,10 +208,10 @@ def main():
 
 
 if __name__ == '__main__':
-    try:
-        main()
-    except Exception as e:
-        ex_type, ex, tb = sys.exc_info()
-        traceback.print_tb(tb)
-        print("Error:", e)
-        print("Line:", sys.exc_traceback.tb_lineno)
+    # try:
+    main()
+    # except Exception as e:
+    #     ex_type, ex, tb = sys.exc_info()
+    #     traceback.print_tb(tb)
+    #     print("Error:", e)
+    #     print("Line:", sys.exc_traceback.tb_lineno)
