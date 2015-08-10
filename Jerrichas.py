@@ -194,7 +194,8 @@ def main():
     config = get_from_config('./jerrichas.ini')
     test_path(config)
 
-    from jerrichas import CostumeCSV, ParagonChatDB
+    from jerrichas import ParagonChatDB
+    from jerrichas.costume import CostumeCSV
     try:
         costumesave = CostumeCSV(open(config['COSTUME_FILE'], 'r'))
     except Exception as e:

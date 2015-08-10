@@ -2,8 +2,8 @@
 # module by ROBOKiTTY
 # GPLv3
 
-from costume import BaseCostumeSave
-import utils
+from . import BaseCostumeSave
+from jerrichas import utils
 
 
 class TailorCostume(BaseCostumeSave):
@@ -83,7 +83,6 @@ class TailorCostume(BaseCostumeSave):
                         costume_map[part_index][key_name] = segments[1:]
 
         return costume_map
-
 
     def get_costumeparts(self):
         """
