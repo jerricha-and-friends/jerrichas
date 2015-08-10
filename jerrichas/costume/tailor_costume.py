@@ -3,7 +3,7 @@
 # GPLv3
 
 from . import BaseCostumeSave
-from .. import utils
+from . import utils
 
 
 class TailorCostume(BaseCostumeSave):
