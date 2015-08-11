@@ -13,7 +13,7 @@ class TailorCostume(BaseCostumeSave):
     def __init__(self, fp):
         """
         :param fp: /.costume file
-        :type path: str
+        :type path: file
         """
         super()
         self.costume_map = self.parse(fp)
@@ -95,7 +95,9 @@ class TailorCostume(BaseCostumeSave):
                             costume_map[part_index][key_name] = ''
                         else:
                             if segments[1:].__len__() > 1:
-                                costume_map[part_index][key_name] = ' '.join(segments[1:])
+                                # some elements are composed of strings with spaces in them
+                                # reassembling them and removing quotation marks
+                                costume_map[part_index][key_name] = ' '.join(segments[1:]).replace('"', '')
                             else:
                                 costume_map[part_index][key_name] = segments[1:][0]
 
