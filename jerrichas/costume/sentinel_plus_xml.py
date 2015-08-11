@@ -2,6 +2,8 @@
 # GPLv3
 
 from .base import BaseCostumeSave
+from . import utils
+import xml.etree.ElementTree as ET
 
 
 class SentinelPlusXML(BaseCostumeSave):
