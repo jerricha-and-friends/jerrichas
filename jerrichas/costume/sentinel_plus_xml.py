@@ -1,10 +1,9 @@
 # Jerrichas by Jerricha@chat.cohtitan.com, Summer 2015!
 # GPLv3
 
-from . import BaseCostumeSave
+from .base import BaseCostumeSave
 from . import utils
 import xml.etree.ElementTree as ET
-
 
 class SentinelPlusXML(BaseCostumeSave):
     """
