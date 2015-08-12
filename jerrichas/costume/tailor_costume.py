@@ -13,7 +13,7 @@ class TailorCostume(BaseCostumeSave):
     def __init__(self, fp):
         """
         :param fp: /.costume file
-        :type path: str
+        :type path: file
         """
         super()
         self.costume_map = self.parse(fp)
@@ -70,6 +70,7 @@ class TailorCostume(BaseCostumeSave):
                         costume_map['region'] = ''
                     elif costume_map.get('bodyset') is None:
                         costume_map['bodyset'] = ''
+                    costume_map['part'] = part_index
                     file_depth = 1
                     part_index += 1
                 else:
@@ -94,7 +95,9 @@ class TailorCostume(BaseCostumeSave):
                             costume_map[part_index][key_name] = ''
                         else:
                             if segments[1:].__len__() > 1:
-                                costume_map[part_index][key_name] = ' '.join(segments[1:])
+                                # some elements are composed of strings with spaces in them
+                                # reassembling them and removing quotation marks
+                                costume_map[part_index][key_name] = ' '.join(segments[1:]).replace('"', '')
                             else:
                                 costume_map[part_index][key_name] = segments[1:][0]
 
@@ -106,9 +109,13 @@ class TailorCostume(BaseCostumeSave):
         :returns: a mapping of /.costume elements to ParagonChatDB 'costumepart' columns
         """
         super()
-        return None
+        result = []
+        for key in self.costume_map:
+            if key.isdigit():
+                result.append(self.costume_map[key])
+        return sorted(result, key = lambda k: k['part'])
 
-    def get_proportions(self):
+    def get_scales(self):
         """
         :returns: a mapping of /.costume records to ParagonChatDB 'costume' columns.
         """
