@@ -2,14 +2,14 @@
 # GPLv3
 # NOTE: Test files need to be unexecutable for Nose to run.
 
-from .base import BaseCostumeTestCase
-from . import fixtures
+from ..base import BaseCostumeTestCase
+from .. import fixtures
 from jerrichas.costume import CostumeCSV
 from nose.plugins.attrib import attr
 import os
 
 PATH = os.path.split(os.path.realpath(__file__))[0]
-COSTUME_PATH = os.path.join(os.path.split(os.path.realpath(__file__))[0], "data/costumes")
+COSTUME_PATH = os.path.join(os.path.split(os.path.realpath(__file__))[0], "../data/costumes")
 
 
 class CostumeCSVTestCase(BaseCostumeTestCase):
