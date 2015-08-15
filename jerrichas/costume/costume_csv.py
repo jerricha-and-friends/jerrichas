@@ -62,12 +62,12 @@ class CostumeCSV(BaseCostumeSave):
             legscale=row[16],
 
             ## Head/Face Scales (Composites) ##
-            headscales=int_convert(*row[18:20]),
-            browscales=int_convert(*row[21:23]),
-            cheekscales=int_convert(*row[24:26]),
-            chinscales=int_convert(*row[27:29]),
-            craniumscales=int_convert(*row[30:32]),
-            jawscales=int_convert(*row[33:35]),
-            nosescales=int_convert(*row[36:38]),
+            headscales=int_convert(*row[18:20+1]),
+            browscales=int_convert(*row[21:23+1]),
+            cheekscales=int_convert(*row[24:26+1]),
+            chinscales=int_convert(*row[27:29+1]),
+            craniumscales=int_convert(*row[30:32+1]),
+            jawscales=int_convert(*row[33:35+1]),
+            nosescales=int_convert(*row[36:38+1]),
         )
         return proportions
