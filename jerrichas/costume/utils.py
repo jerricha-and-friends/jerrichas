@@ -45,7 +45,8 @@ def int32(x):
 def encode_colour(colour_vals):
     """
     :param colour_vals: list of three decimal integers clamped between 0~255
-    :return: a colour string in format "rrggbbaa", where aa is 'ff' and all alphabetical numbers are lower case
+    :return: a colour string in format "rrggbbaa", where aa is 'ff' and all alphabetical numbers are lower case,
+            converted to a 32-bit signed int in little endian
     """
     assert (colour_vals.__len__() == 3)
     colour_vals = [int(colour) for colour in colour_vals]
