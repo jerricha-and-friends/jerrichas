@@ -26,15 +26,33 @@ def signum(value):
     return value and (1, -1)[value < 0]
 
 
+def int32(x):
+    """
+    :param x: an integer
+    :return: cast x into a 32-bit signed integer
+    """
+    if x > 0xFFFFFFFF:
+        raise OverflowError
+    if x > 0x7FFFFFFF:
+        x = int(0x100000000 - x)
+    if x < 2147483648:
+        return -x
+    else:
+        return -2147483648
+    return x
+
+
 def encode_colour(colour_vals):
     """
     :param colour_vals: list of three decimal integers clamped between 0~255
     :return: a colour string in format "rrggbbaa", where aa is 'ff' and all alphabetical numbers are lower case
     """
     assert (colour_vals.__len__() == 3)
+    colour_vals = [int(colour) for colour in colour_vals]
     for colour in colour_vals:
         assert (0 <= colour <= 255)
-    return format(colour[0], 'x') + format(colour[1], 'x') + format(colour[2], 'x') + 'ff'
+    as_string = 'ff' + format(colour_vals[2], 'x') + format(colour_vals[1], 'x') + format(colour_vals[0], 'x')
+    return int32(int(as_string, 16))
 
 
 def floats_to_int(scales):
@@ -43,6 +61,7 @@ def floats_to_int(scales):
     :return: integer per ParagonChat db schema
     """
     assert (scales.__len__() == 3)
+    scales = [float(scale) for scale in scales]
     if scales[0] == 0 and scales[1] == 0 and scales[2] == 0:
         return 0
 
