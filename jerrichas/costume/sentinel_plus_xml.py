@@ -50,13 +50,13 @@ class SentinelPlusXML(BaseCostumeSave):
             costume_map['hipscale'] = scales[6]
             costume_map['legscale'] = scales[7]
 
-            costume_map['headscales'] = utils.floats_to_int(scales[9:11])
-            costume_map['browscales'] = utils.floats_to_int(scales[12:14])
-            costume_map['cheekscales'] = utils.floats_to_int(scales[15:17])
-            costume_map['chinscales'] = utils.floats_to_int(scales[18:20])
-            costume_map['craniumscales'] = utils.floats_to_int(scales[21:23])
-            costume_map['jawscales'] = utils.floats_to_int(scales[24:26])
-            costume_map['nosecales'] = utils.floats_to_int(scales[27:29])
+            costume_map['headscales'] = utils.floats_to_int(scales[9:11+1])
+            costume_map['browscales'] = utils.floats_to_int(scales[12:14+1])
+            costume_map['cheekscales'] = utils.floats_to_int(scales[15:17+1])
+            costume_map['chinscales'] = utils.floats_to_int(scales[18:20+1])
+            costume_map['craniumscales'] = utils.floats_to_int(scales[21:23+1])
+            costume_map['jawscales'] = utils.floats_to_int(scales[24:26+1])
+            costume_map['nosecales'] = utils.floats_to_int(scales[27:29+1])
 
             # iterate through parts
 
